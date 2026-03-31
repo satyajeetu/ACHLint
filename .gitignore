@@ -4,3 +4,9 @@
 .venv/
 __pycache__/
 *.pyc
+screenshots/
+landing-debug.png
+streamlit-app-screenshot.png
+local-redesign-preview.png
+web/.next/
+web/node_modules/
