@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from collections import defaultdict
 from datetime import date, timedelta
+from html import escape
 from typing import Iterable
 
 import streamlit as st
@@ -62,15 +63,43 @@ def inject_styles() -> None:
     st.markdown(
         """
         <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,700;8..144,800&family=Roboto+Mono:wght@500&display=swap');
+        :root {
+            --md-primary: #335d50;
+            --md-on-primary: #ffffff;
+            --md-primary-container: #d7eadf;
+            --md-on-primary-container: #0f1f18;
+            --md-secondary: #4a6359;
+            --md-secondary-container: #dce8e1;
+            --md-tertiary: #6c5b2f;
+            --md-tertiary-container: #f5e4a7;
+            --md-error: #b3261e;
+            --md-error-container: #f9dedc;
+            --md-surface: #f8faf7;
+            --md-surface-soft: #f1f5f1;
+            --md-surface-container: rgba(255, 255, 255, 0.82);
+            --md-surface-container-high: rgba(255, 255, 255, 0.94);
+            --md-outline: rgba(26, 45, 38, 0.14);
+            --md-outline-strong: rgba(26, 45, 38, 0.22);
+            --md-text: #17221d;
+            --md-text-soft: #54675f;
+            --md-text-muted: #6c7f77;
+            --md-shadow: 0 18px 44px rgba(18, 41, 33, 0.08);
+            --md-radius-lg: 20px;
+            --md-radius-md: 16px;
+            --md-radius-sm: 12px;
+        }
         .stApp {
             background:
-                radial-gradient(circle at top right, rgba(15, 76, 68, 0.10), transparent 26%),
-                radial-gradient(circle at bottom left, rgba(154, 185, 175, 0.18), transparent 34%),
-                linear-gradient(180deg, #f6f8f7 0%, #edf2ef 100%);
+                radial-gradient(circle at top right, rgba(51, 93, 80, 0.12), transparent 24%),
+                radial-gradient(circle at 10% 20%, rgba(235, 224, 176, 0.22), transparent 18%),
+                linear-gradient(180deg, #f7faf7 0%, #eef3ef 100%);
+            color: var(--md-text);
+            font-family: "Roboto Flex", "Inter", sans-serif;
         }
         .block-container {
-            padding-top: 1.25rem;
-            padding-bottom: 3rem;
+            padding-top: 1rem;
+            padding-bottom: 3.5rem;
             max-width: 1320px;
         }
         section[data-testid="stSidebar"] {
@@ -80,57 +109,68 @@ def inject_styles() -> None:
             display: none;
         }
         .app-shell {
-            background: rgba(255,255,255,0.82);
-            border: 1px solid rgba(17, 48, 41, 0.09);
+            background: var(--md-surface-container);
+            border: 1px solid var(--md-outline);
             border-radius: 24px;
             padding: 1rem 1.15rem;
             margin-bottom: 1rem;
-            box-shadow: 0 16px 40px rgba(15, 42, 36, 0.07);
-            backdrop-filter: blur(10px);
+            box-shadow: var(--md-shadow);
+            backdrop-filter: blur(14px);
         }
         .shell-brand {
             font-size: 1.45rem;
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -0.03em;
-            color: #16352f;
+            color: var(--md-text);
         }
         .shell-subtitle {
-            color: #638078;
+            color: var(--md-text-soft);
             font-size: 0.92rem;
             line-height: 1.4;
             margin-top: 0.15rem;
         }
         .shell-meta {
-            background: linear-gradient(180deg, #f4f8f6 0%, #eef5f2 100%);
-            border: 1px solid #dce9e2;
+            background: linear-gradient(180deg, #f4f8f4 0%, #edf3ef 100%);
+            border: 1px solid var(--md-outline);
             border-radius: 16px;
             padding: 0.85rem 1rem;
-            color: #46675d;
+            color: var(--md-text-soft);
             font-size: 0.9rem;
             line-height: 1.45;
         }
         .shell-meta strong {
-            color: #173832;
+            color: var(--md-text);
         }
         .hero-card, .section-card, .metric-card, .trust-card, .artifact-card, .workspace-card {
-            background: rgba(255, 255, 255, 0.96);
-            border: 1px solid rgba(22, 53, 47, 0.09);
-            border-radius: 20px;
-            box-shadow: 0 12px 30px rgba(20, 46, 40, 0.05);
+            background: var(--md-surface-container-high);
+            border: 1px solid var(--md-outline);
+            border-radius: var(--md-radius-lg);
+            box-shadow: var(--md-shadow);
         }
         .hero-card {
             padding: 2.4rem 2.5rem;
             margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-card::after, .workspace-card::after {
+            content: "";
+            position: absolute;
+            inset: 0 auto auto 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--md-primary) 0%, #8ba89c 60%, rgba(139, 168, 156, 0) 100%);
+            opacity: 0.95;
         }
         .sales-problem {
-            color: #5f7a71;
+            color: var(--md-text-soft);
             font-size: 1rem;
             line-height: 1.6;
             max-width: 48rem;
             margin-bottom: 0.7rem;
         }
         .eyebrow {
-            color: #215647;
+            color: var(--md-primary);
             font-size: 0.85rem;
             font-weight: 700;
             letter-spacing: 0.1em;
@@ -141,18 +181,18 @@ def inject_styles() -> None:
             font-size: 2.7rem;
             line-height: 1.05;
             letter-spacing: -0.04em;
-            color: #173832;
+            color: var(--md-text);
             margin-bottom: 0.8rem;
             font-weight: 800;
         }
         .hero-copy {
-            color: #45655b;
+            color: var(--md-text-soft);
             font-size: 1.05rem;
             line-height: 1.65;
             max-width: 56rem;
         }
         .hero-minimal-proof {
-            color: #6a837b;
+            color: var(--md-text-muted);
             font-size: 0.9rem;
             line-height: 1.5;
             margin-top: 0.95rem;
@@ -181,20 +221,20 @@ def inject_styles() -> None:
         .trust-pill {
             border-radius: 999px;
             padding: 0.55rem 0.8rem;
-            background: #f4f8f6;
-            border: 1px solid #dce9e2;
-            color: #32594e;
+            background: var(--md-surface-soft);
+            border: 1px solid var(--md-outline);
+            color: var(--md-primary);
             font-size: 0.86rem;
             font-weight: 600;
         }
         .trust-title, .metric-label {
-            color: #204c40;
+            color: var(--md-text);
             font-weight: 700;
             font-size: 0.92rem;
             margin-bottom: 0.2rem;
         }
         .trust-copy, .metric-copy {
-            color: #5f7a71;
+            color: var(--md-text-soft);
             font-size: 0.92rem;
             line-height: 1.45;
         }
@@ -205,6 +245,8 @@ def inject_styles() -> None:
         .workspace-card {
             padding: 1.4rem 1.45rem;
             margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
         }
         .feature-band {
             display: grid;
@@ -214,37 +256,37 @@ def inject_styles() -> None:
         }
         .feature-panel {
             border-radius: 18px;
-            border: 1px solid #dce8e2;
-            background: linear-gradient(180deg, #fbfcfb 0%, #f5f8f6 100%);
+            border: 1px solid var(--md-outline);
+            background: linear-gradient(180deg, #fbfcfb 0%, #f2f6f3 100%);
             padding: 1rem 1.05rem;
         }
         .feature-label {
-            color: #70877f;
+            color: var(--md-text-muted);
             font-size: 0.82rem;
             margin-bottom: 0.35rem;
         }
         .feature-value {
-            color: #173832;
+            color: var(--md-text);
             font-size: 1.15rem;
             font-weight: 760;
             letter-spacing: -0.02em;
         }
         .tutorial-card {
             border-radius: 20px;
-            border: 1px solid #dbe8e1;
-            background: linear-gradient(180deg, #ffffff 0%, #f4f8f6 100%);
-            box-shadow: 0 12px 28px rgba(20, 46, 40, 0.05);
+            border: 1px solid var(--md-outline);
+            background: linear-gradient(180deg, #ffffff 0%, #f3f7f4 100%);
+            box-shadow: var(--md-shadow);
             padding: 1.2rem 1.25rem;
             margin-bottom: 1rem;
         }
         .tutorial-title {
-            color: #173832;
+            color: var(--md-text);
             font-size: 1.08rem;
             font-weight: 760;
             margin-bottom: 0.25rem;
         }
         .tutorial-copy {
-            color: #607870;
+            color: var(--md-text-soft);
             font-size: 0.95rem;
             line-height: 1.5;
             margin-bottom: 0.9rem;
@@ -256,7 +298,7 @@ def inject_styles() -> None:
         }
         .tutorial-step {
             border-radius: 16px;
-            border: 1px solid #dfebe4;
+            border: 1px solid var(--md-outline);
             background: #fbfcfb;
             padding: 0.9rem;
         }
@@ -267,27 +309,27 @@ def inject_styles() -> None:
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #1d5646;
+            background: var(--md-primary);
             color: white;
             font-size: 0.78rem;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
         .tutorial-step-title {
-            color: #21473c;
+            color: var(--md-text);
             font-size: 0.95rem;
             font-weight: 700;
             margin-bottom: 0.2rem;
         }
         .tutorial-step-copy {
-            color: #688078;
+            color: var(--md-text-soft);
             font-size: 0.88rem;
             line-height: 1.45;
         }
         .customer-note {
-            border-left: 4px solid #1d5646;
+            border-left: 4px solid var(--md-primary);
             padding-left: 0.9rem;
-            color: #557067;
+            color: var(--md-text-soft);
             font-size: 0.95rem;
             line-height: 1.55;
             margin: 0.9rem 0 0 0;
@@ -311,8 +353,8 @@ def inject_styles() -> None:
             border-radius: 999px;
             padding: 0.45rem 0.75rem;
             border: 1px solid #dce9e2;
-            background: #f6faf8;
-            color: #365b51;
+            background: #f3f8f4;
+            color: var(--md-primary);
             font-size: 0.84rem;
             font-weight: 600;
         }
@@ -324,12 +366,12 @@ def inject_styles() -> None:
         }
         .mini-funnel-card {
             border-radius: 18px;
-            border: 1px solid #deebe4;
+            border: 1px solid var(--md-outline);
             background: #fbfcfb;
             padding: 1rem;
         }
         .mini-funnel-kicker {
-            color: #1f5849;
+            color: var(--md-primary);
             font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
@@ -337,13 +379,13 @@ def inject_styles() -> None:
             margin-bottom: 0.35rem;
         }
         .mini-funnel-title {
-            color: #1e4037;
+            color: var(--md-text);
             font-size: 1rem;
             font-weight: 720;
             margin-bottom: 0.2rem;
         }
         .mini-funnel-copy {
-            color: #688078;
+            color: var(--md-text-soft);
             font-size: 0.9rem;
             line-height: 1.45;
         }
@@ -355,43 +397,45 @@ def inject_styles() -> None:
         }
         .story-panel {
             border-radius: 20px;
-            border: 1px solid #deebe4;
+            border: 1px solid var(--md-outline);
             background: rgba(255,255,255,0.88);
             padding: 1.25rem 1.35rem;
         }
         .story-title {
-            color: #173832;
+            color: var(--md-text);
             font-size: 1.05rem;
             font-weight: 720;
             margin-bottom: 0.45rem;
         }
         .story-copy {
-            color: #5f7971;
+            color: var(--md-text-soft);
             font-size: 0.94rem;
             line-height: 1.6;
         }
         .section-title {
             font-weight: 700;
-            color: #1d4137;
+            color: var(--md-text);
             margin-bottom: 0.25rem;
             font-size: 1.15rem;
         }
         .section-copy {
-            color: #557067;
+            color: var(--md-text-soft);
             line-height: 1.55;
             font-size: 0.96rem;
         }
         .step-pill, .status-pill {
             display: inline-block;
             border-radius: 999px;
-            padding: 0.32rem 0.72rem;
+            padding: 0.36rem 0.78rem;
             font-size: 0.82rem;
             font-weight: 700;
             margin-bottom: 0.8rem;
+            border: 1px solid transparent;
         }
         .step-pill {
-            background: #e8f4ef;
-            color: #245347;
+            background: var(--md-primary-container);
+            color: var(--md-on-primary-container);
+            border-color: rgba(51, 93, 80, 0.12);
         }
         .progress-strip {
             display: grid;
@@ -401,7 +445,7 @@ def inject_styles() -> None:
         }
         .progress-card {
             border-radius: 18px;
-            border: 1px solid #dbe9e1;
+            border: 1px solid var(--md-outline);
             background: #f7fbf8;
             padding: 1rem;
         }
@@ -412,20 +456,20 @@ def inject_styles() -> None:
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #1d5646;
+            background: var(--md-primary);
             color: white;
             font-size: 0.82rem;
             font-weight: 700;
             margin-bottom: 0.55rem;
         }
         .progress-title {
-            color: #24473d;
+            color: var(--md-text);
             font-size: 0.96rem;
             font-weight: 700;
             margin-bottom: 0.25rem;
         }
         .progress-copy {
-            color: #637d75;
+            color: var(--md-text-soft);
             font-size: 0.9rem;
             line-height: 1.45;
         }
@@ -437,17 +481,17 @@ def inject_styles() -> None:
         }
         .wizard-step {
             border-radius: 18px;
-            border: 1px solid #dbe9e1;
+            border: 1px solid var(--md-outline);
             background: rgba(255,255,255,0.74);
             padding: 1rem;
         }
         .wizard-step.active {
-            border-color: #bfd9cd;
-            background: linear-gradient(180deg, #f6fbf8 0%, #eef5f2 100%);
-            box-shadow: inset 0 0 0 1px rgba(29, 86, 70, 0.05);
+            border-color: rgba(51, 93, 80, 0.22);
+            background: linear-gradient(180deg, #f6fbf8 0%, #ebf3ef 100%);
+            box-shadow: inset 0 0 0 1px rgba(51, 93, 80, 0.08);
         }
         .wizard-step.done {
-            border-color: #cfe3d9;
+            border-color: rgba(74, 99, 89, 0.18);
             background: #f9fcfa;
         }
         .wizard-step-number {
@@ -457,39 +501,42 @@ def inject_styles() -> None:
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: #dce9e2;
-            color: #295244;
+            background: #dfe8e2;
+            color: var(--md-primary);
             font-size: 0.82rem;
             font-weight: 700;
             margin-bottom: 0.45rem;
         }
         .wizard-step.active .wizard-step-number,
         .wizard-step.done .wizard-step-number {
-            background: #1d5646;
+            background: var(--md-primary);
             color: white;
         }
         .wizard-step-title {
-            color: #1f4339;
+            color: var(--md-text);
             font-size: 0.96rem;
             font-weight: 720;
             margin-bottom: 0.2rem;
         }
         .wizard-step-copy {
-            color: #667f77;
+            color: var(--md-text-soft);
             font-size: 0.88rem;
             line-height: 1.45;
         }
         .status-success {
-            background: #e7f7ee;
-            color: #167246;
+            background: #d9f2e3;
+            color: #165c3a;
+            border-color: rgba(22, 92, 58, 0.14);
         }
         .status-warning {
-            background: #fff5df;
-            color: #8a5a00;
+            background: #fff1cf;
+            color: #7d5700;
+            border-color: rgba(125, 87, 0, 0.16);
         }
         .status-fail {
-            background: #fdeaea;
-            color: #983737;
+            background: var(--md-error-container);
+            color: #8c1d18;
+            border-color: rgba(140, 29, 24, 0.18);
         }
         .summary-strip {
             display: grid;
@@ -500,11 +547,11 @@ def inject_styles() -> None:
         .artifact-title {
             font-size: 1rem;
             font-weight: 700;
-            color: #1b4037;
+            color: var(--md-text);
             margin-bottom: 0.25rem;
         }
         .artifact-copy {
-            color: #607c73;
+            color: var(--md-text-soft);
             font-size: 0.92rem;
             line-height: 1.45;
         }
@@ -512,12 +559,12 @@ def inject_styles() -> None:
             font-size: 1.45rem;
             line-height: 1.15;
             letter-spacing: -0.03em;
-            color: #173832;
+            color: var(--md-text);
             margin-bottom: 0.25rem;
             font-weight: 760;
         }
         .workspace-copy {
-            color: #5b746c;
+            color: var(--md-text-soft);
             font-size: 0.97rem;
             line-height: 1.55;
             margin-bottom: 1rem;
@@ -532,54 +579,182 @@ def inject_styles() -> None:
             padding: 0.9rem 1rem;
             border-radius: 18px;
             background: #f7fbf8;
-            border: 1px solid #dde9e2;
+            border: 1px solid var(--md-outline);
         }
         .mini-kpi-label {
-            color: #658179;
+            color: var(--md-text-muted);
             font-size: 0.84rem;
             margin-bottom: 0.2rem;
         }
         .mini-kpi-value {
-            color: #173832;
+            color: var(--md-text);
             font-weight: 760;
             font-size: 1.15rem;
         }
         .plain-list {
             margin: 0;
             padding-left: 1rem;
-            color: #4c6a60;
+            color: var(--md-text-soft);
             line-height: 1.6;
+        }
+        .metric-grid, .fact-grid {
+            display: grid;
+            gap: 0.85rem;
+            margin: 0.8rem 0 0;
+        }
+        .metric-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            margin-bottom: 1rem;
+        }
+        .fact-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .metric-card, .fact-card {
+            padding: 1rem 1.05rem;
+            border-radius: 18px;
+            background: linear-gradient(180deg, #ffffff 0%, #f4f8f5 100%);
+            border: 1px solid var(--md-outline);
+            box-shadow: 0 10px 24px rgba(18, 41, 33, 0.04);
+        }
+        .metric-value, .fact-value {
+            color: var(--md-text);
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+        }
+        .metric-label, .fact-label {
+            color: var(--md-text-muted);
+            font-size: 0.82rem;
+            margin-bottom: 0.32rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+        }
+        .fact-value {
+            font-size: 1rem;
+            font-family: "Roboto Mono", ui-monospace, monospace;
+            overflow-wrap: anywhere;
+        }
+        .issue-cluster {
+            border-radius: 18px;
+            padding: 0.95rem 1rem;
+            margin: 0.85rem 0 0.65rem 0;
+            border: 1px solid var(--md-outline);
+            background: #fff;
+        }
+        .issue-cluster-title {
+            color: var(--md-text);
+            font-size: 0.95rem;
+            font-weight: 760;
+            margin-bottom: 0.2rem;
+        }
+        .issue-cluster-copy {
+            color: var(--md-text-soft);
+            font-size: 0.9rem;
+            line-height: 1.45;
+        }
+        .issue-cluster.error {
+            background: linear-gradient(180deg, #fff7f6 0%, #fdf0ef 100%);
+            border-color: rgba(179, 38, 30, 0.16);
+        }
+        .issue-cluster.warning {
+            background: linear-gradient(180deg, #fff9ef 0%, #fff2da 100%);
+            border-color: rgba(125, 87, 0, 0.16);
+        }
+        .issue-cluster.info {
+            background: linear-gradient(180deg, #f5fbf7 0%, #edf6f0 100%);
+            border-color: rgba(51, 93, 80, 0.14);
         }
         .stButton > button, .stDownloadButton > button {
             border-radius: 14px;
             font-weight: 700;
-            min-height: 2.8rem;
+            min-height: 2.95rem;
+            transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background 120ms ease;
         }
         .stButton > button[kind="primary"], .stDownloadButton > button[kind="primary"] {
-            background: linear-gradient(180deg, #194f43 0%, #123d34 100%);
-            color: white;
-            border: 1px solid #123d34;
-            box-shadow: 0 12px 28px rgba(18, 61, 52, 0.22);
+            background: linear-gradient(180deg, var(--md-primary) 0%, #24483d 100%);
+            color: var(--md-on-primary);
+            border: 1px solid #24483d;
+            box-shadow: 0 14px 30px rgba(36, 72, 61, 0.24);
         }
         .stButton > button[kind="primary"]:hover, .stDownloadButton > button[kind="primary"]:hover {
-            border-color: #0f342d;
-            background: linear-gradient(180deg, #17493e 0%, #0f342d 100%);
-            color: white;
+            border-color: #1b382f;
+            background: linear-gradient(180deg, #30564a 0%, #1b382f 100%);
+            color: var(--md-on-primary);
+            transform: translateY(-1px);
         }
         .stButton > button[kind="secondary"] {
-            border: 1px solid #d4e5dc;
-            color: #204b40;
-            background: rgba(255,255,255,0.9);
+            border: 1px solid var(--md-outline);
+            color: var(--md-primary);
+            background: rgba(255,255,255,0.92);
+            box-shadow: 0 6px 16px rgba(18, 41, 33, 0.03);
+        }
+        .stButton > button[kind="secondary"]:hover, .stDownloadButton > button[kind="secondary"]:hover {
+            border-color: var(--md-outline-strong);
+            background: #f5f8f6;
+            transform: translateY(-1px);
+        }
+        .stButton > button:focus-visible, .stDownloadButton > button:focus-visible,
+        div[data-baseweb="input"] input:focus, textarea:focus {
+            outline: 3px solid rgba(51, 93, 80, 0.18);
+            outline-offset: 2px;
+            box-shadow: 0 0 0 1px rgba(51, 93, 80, 0.32);
+        }
+        div[data-baseweb="input"] input,
+        div[data-baseweb="base-input"] input,
+        div[data-baseweb="textarea"] textarea {
+            background: rgba(255, 255, 255, 0.92);
+            border-radius: 14px;
+            color: var(--md-text);
+        }
+        div[data-baseweb="input"] > div,
+        div[data-baseweb="base-input"] > div,
+        div[data-baseweb="textarea"] > div,
+        div[data-baseweb="select"] > div {
+            border-radius: 14px !important;
+            border-color: var(--md-outline) !important;
+            background: rgba(255, 255, 255, 0.92) !important;
+            box-shadow: none !important;
+        }
+        div[data-testid="stDateInput"] > div,
+        div[data-testid="stNumberInput"] > div {
+            border-radius: 14px;
+        }
+        div[data-testid="stFileUploaderDropzone"] {
+            border-radius: 20px;
+            border: 1.5px dashed rgba(51, 93, 80, 0.35);
+            background: linear-gradient(180deg, #fcfefd 0%, #f3f8f5 100%);
+            padding-top: 1.1rem;
+            padding-bottom: 1.1rem;
+        }
+        div[data-testid="stFileUploaderDropzone"]:hover {
+            border-color: rgba(51, 93, 80, 0.55);
+            background: linear-gradient(180deg, #fbfefc 0%, #eef6f1 100%);
+        }
+        div[data-testid="stDataFrame"] {
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid var(--md-outline);
+            background: rgba(255, 255, 255, 0.92);
         }
         div[data-testid="stMetric"] {
             background: rgba(255, 255, 255, 0.92);
-            border: 1px solid rgba(22, 53, 47, 0.10);
+            border: 1px solid var(--md-outline);
             padding: 1rem;
             border-radius: 18px;
             box-shadow: 0 12px 30px rgba(20, 46, 40, 0.04);
         }
+        div[data-testid="stAlert"] {
+            border-radius: 18px;
+            border: 1px solid var(--md-outline);
+            background: rgba(255, 255, 255, 0.94);
+        }
+        div[data-testid="stExpander"] {
+            border: 1px solid var(--md-outline);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.78);
+        }
         @media (max-width: 900px) {
-            .trust-grid, .summary-strip, .progress-strip, .proof-grid, .mini-kpis, .feature-band, .tutorial-steps, .hero-actions, .mini-funnel, .landing-story, .wizard-strip {
+            .trust-grid, .summary-strip, .progress-strip, .proof-grid, .mini-kpis, .feature-band, .tutorial-steps, .hero-actions, .mini-funnel, .landing-story, .wizard-strip, .metric-grid, .fact-grid {
                 grid-template-columns: 1fr;
             }
             .hero-title {
@@ -1251,12 +1426,20 @@ def render_generate_settings_step(csv_file) -> None:
         config = build_originator_config_from_session()
         st.markdown('<div class="workspace-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Current session settings</div>', unsafe_allow_html=True)
-        st.write(f"**Company**: {config.company_name}")
-        st.write(f"**Entry description**: {config.company_entry_description}")
-        st.write(f"**Effective date**: {config.effective_entry_date.isoformat()}")
-        st.write(f"**Destination routing**: {config.immediate_destination_routing}")
-        st.write(f"**Origin routing**: {config.immediate_origin_routing}")
-        st.write(f"**Trace start**: {config.trace_number_start}")
+        st.markdown(
+            '<div class="section-copy">This supporting pane keeps the current ACH header inputs visible while you work, so you do not need to mentally carry the configuration between steps.</div>',
+            unsafe_allow_html=True,
+        )
+        render_fact_grid(
+            [
+                ("Company", config.company_name),
+                ("Entry description", config.company_entry_description),
+                ("Effective date", config.effective_entry_date.isoformat()),
+                ("Destination routing", config.immediate_destination_routing),
+                ("Origin routing", config.immediate_origin_routing),
+                ("Trace start", str(config.trace_number_start)),
+            ]
+        )
         c1, c2 = st.columns(2)
         with c1:
             if st.button("Back to upload", use_container_width=True, key="settings_back_upload"):
@@ -1299,12 +1482,20 @@ def render_generate_review_step(csv_file, preview_rows: list, preview_issues: li
     with right:
         st.markdown('<div class="workspace-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Generation summary</div>', unsafe_allow_html=True)
-        st.write(f"**Company**: {config.company_name}")
-        st.write(f"**Effective date**: {config.effective_entry_date.isoformat()}")
-        st.write(f"**Originating DFI**: {config.originating_dfi_identification}")
-        st.write(f"**Destination routing**: {config.immediate_destination_routing}")
-        st.write(f"**Entries**: {len(preview_rows)}")
-        st.write(f"**Projected total credit**: ${sum(float(row.amount) for row in preview_rows):,.2f}")
+        st.markdown(
+            '<div class="section-copy">Use this panel as the final preflight check. It surfaces the exact identifiers and totals that will shape the file you generate.</div>',
+            unsafe_allow_html=True,
+        )
+        render_fact_grid(
+            [
+                ("Company", config.company_name),
+                ("Effective date", config.effective_entry_date.isoformat()),
+                ("Originating DFI", config.originating_dfi_identification),
+                ("Destination routing", config.immediate_destination_routing),
+                ("Entries", str(len(preview_rows))),
+                ("Projected total", f"${sum(float(row.amount) for row in preview_rows):,.2f}"),
+            ]
+        )
         generate_disabled = csv_file is None
         if st.button("Back to settings", use_container_width=True, key="review_back_settings"):
             st.session_state["generate_step"] = 2
@@ -1380,9 +1571,29 @@ def render_empty_state(title: str, copy: str) -> None:
 
 
 def render_summary_metrics(items: list[tuple[str, str]]) -> None:
-    cols = st.columns(len(items))
-    for col, (label, value) in zip(cols, items):
-        col.metric(label, value)
+    cards = "".join(
+        f"""
+        <div class="metric-card">
+            <div class="metric-label">{escape(label)}</div>
+            <div class="metric-value">{escape(value)}</div>
+        </div>
+        """
+        for label, value in items
+    )
+    st.markdown(f'<div class="metric-grid">{cards}</div>', unsafe_allow_html=True)
+
+
+def render_fact_grid(items: list[tuple[str, str]]) -> None:
+    cards = "".join(
+        f"""
+        <div class="fact-card">
+            <div class="fact-label">{escape(label)}</div>
+            <div class="fact-value">{escape(value)}</div>
+        </div>
+        """
+        for label, value in items
+    )
+    st.markdown(f'<div class="fact-grid">{cards}</div>', unsafe_allow_html=True)
 
 
 def render_issue_groups(issues: Iterable[ValidationIssue], *, empty_message: str) -> None:
@@ -1396,13 +1607,37 @@ def render_issue_groups(issues: Iterable[ValidationIssue], *, empty_message: str
         grouped[issue.severity].append(issue)
 
     if grouped.get("error"):
-        st.error(issue_summary_copy("error", len(grouped["error"])))
+        st.markdown(
+            f"""
+            <div class="issue-cluster error">
+                <div class="issue-cluster-title">Blocking issues</div>
+                <div class="issue-cluster-copy">{escape(issue_summary_copy("error", len(grouped["error"])))}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.dataframe([issue_to_row(issue) for issue in grouped["error"]], use_container_width=True, hide_index=True)
     if grouped.get("warning"):
-        st.warning(issue_summary_copy("warning", len(grouped["warning"])))
+        st.markdown(
+            f"""
+            <div class="issue-cluster warning">
+                <div class="issue-cluster-title">Warnings to review</div>
+                <div class="issue-cluster-copy">{escape(issue_summary_copy("warning", len(grouped["warning"])))}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.dataframe([issue_to_row(issue) for issue in grouped["warning"]], use_container_width=True, hide_index=True)
     if grouped.get("info"):
-        st.info(issue_summary_copy("info", len(grouped["info"])))
+        st.markdown(
+            f"""
+            <div class="issue-cluster info">
+                <div class="issue-cluster-title">Informational notes</div>
+                <div class="issue-cluster-copy">{escape(issue_summary_copy("info", len(grouped["info"])))}</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
         st.dataframe([issue_to_row(issue) for issue in grouped["info"]], use_container_width=True, hide_index=True)
 
 
