@@ -6,6 +6,7 @@ from typing import Iterable
 
 import streamlit as st
 
+from achlint.copy import ISSUE_TITLE_MAP, UI_COPY, issue_display_message, issue_next_step_copy, issue_summary_copy
 from achlint.csv_parser import parse_payment_csv
 from achlint.csv_template import get_template_csv
 from achlint.models import BuildResult, OriginatorConfig, ValidationIssue, ValidationResult
@@ -629,17 +630,17 @@ def render_app_shell() -> str:
 def render_landing() -> None:
     render_onboarding_tour()
     st.markdown(
-        """
+        f"""
         <div class="hero-card">
-            <div class="eyebrow">ACH file generation without the guesswork</div>
-            <div class="sales-problem">When a bank rejects your ACH file, payroll and payout operations stall. The pressure is high, the rules are rigid, and most teams are stuck working from spreadsheets.</div>
-            <div class="hero-title">Turn your payment spreadsheet into a bank-accepted ACH file in minutes.</div>
+            <div class="eyebrow">{UI_COPY["landing_eyebrow"]}</div>
+            <div class="sales-problem">{UI_COPY["landing_problem"]}</div>
+            <div class="hero-title">{UI_COPY["landing_title"]}</div>
             <div class="hero-copy">
-                ACHLint gives operators a focused path from CSV to validated ACH output. Upload your file, catch structural issues before upload, and leave with an ACH file, a validation report, and an exceptions CSV.
+                {UI_COPY["landing_body"]}
             </div>
-            <div class="hero-minimal-proof">Built for spreadsheet-driven payroll and payouts. Focused scope. Validation before ACH download.</div>
+            <div class="hero-minimal-proof">{UI_COPY["landing_proof"]}</div>
             <div class="customer-note">
-                Start with the guided setup if you are creating a new file. If you already have an ACH file, use Validate to understand why it may fail.
+                {UI_COPY["landing_note"]}
             </div>
         </div>
         """,
@@ -648,20 +649,20 @@ def render_landing() -> None:
 
     cta1, cta2, cta3 = st.columns([1.25, 1, 1])
     with cta1:
-        if st.button("Start guided setup", use_container_width=True, type="primary"):
+        if st.button(UI_COPY["cta_primary"], use_container_width=True, type="primary"):
             st.session_state["show_tour"] = False
             st.session_state["page"] = "Generate"
             st.rerun()
     with cta2:
         st.download_button(
-            "Download CSV template",
+            UI_COPY["cta_template"],
             data=get_template_csv(),
             file_name="achlint_template.csv",
             mime="text/csv",
             use_container_width=True,
         )
     with cta3:
-        if st.button("Validate an existing ACH", use_container_width=True):
+        if st.button(UI_COPY["cta_validate"], use_container_width=True):
             st.session_state["page"] = "Validate"
             st.rerun()
 
@@ -791,17 +792,17 @@ def render_validate() -> None:
         st.markdown('<div class="workspace-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Upload an ACH file</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="section-copy">We will parse the file line by line and return grouped issues plus downloadable artifacts.</div>',
+            '<div class="section-copy">Use this mode to understand what happened in an existing ACH file before you upload it or send it back for correction.</div>',
             unsafe_allow_html=True,
         )
         ach_file = st.file_uploader("Upload .ach file", type=["ach", "txt"], key="validate_ach", label_visibility="collapsed")
         if ach_file is None:
             render_empty_state(
                 "No file uploaded yet",
-                "Upload an existing ACH/NACHA file to inspect structure, totals, record order, and padding.",
+                "Upload an existing ACH/NACHA file to inspect structure, totals, record order, and padding before the next bank upload attempt.",
             )
-        elif st.button("Validate file", type="primary", use_container_width=True):
-            with st.spinner("Validating ACH file..."):
+        elif st.button("Run validation", type="primary", use_container_width=True):
+            with st.spinner(UI_COPY["validate_loading"]):
                 validation = handle_validate(ach_file.getvalue().decode("ascii", errors="replace"))
             st.session_state["latest_result"] = validation
             st.session_state["page"] = "Results"
@@ -814,7 +815,7 @@ def render_results() -> None:
     st.markdown('<div class="eyebrow">Results</div>', unsafe_allow_html=True)
     st.markdown("## Your validation outcome")
     if result is None:
-        render_empty_state("Nothing to show yet", "Run Generate or Validate to see artifacts and validation results here.")
+        render_empty_state("No results yet", "Run Generate or Validate to see your validation outcome and download artifacts here.")
         return
 
     badge_class, headline, copy = result_banner(result)
@@ -833,17 +834,24 @@ def render_results() -> None:
     with action1:
         if st.button("Start a new generation run", use_container_width=True):
             st.session_state["page"] = "Generate"
+            st.session_state["generate_step"] = 1
             st.rerun()
     with action2:
         if st.button("Validate another file", use_container_width=True):
             st.session_state["page"] = "Validate"
             st.rerun()
 
+    if isinstance(result, BuildResult):
+        readiness = UI_COPY["results_ready"] if result.ach_text else UI_COPY["results_not_ready"]
+        st.info(f"Outcome: {readiness}. Review the summary below, then choose the next action.")
+    else:
+        st.info("Outcome: Validation complete. Review the grouped issues below before the next upload attempt.")
+
     render_summary_metrics(
         [
             ("Entries", str(result.summary.entries)),
             ("Total credit", f"${result.summary.total_credit_cents / 100:,.2f}"),
-            ("Errors", str(result.summary.errors)),
+            ("Blocking issues", str(result.summary.errors)),
             ("Warnings", str(result.summary.warnings)),
         ]
     )
@@ -857,7 +865,7 @@ def render_results() -> None:
             """
             <div class="artifact-card">
                 <div class="artifact-title">ACH file</div>
-                <div class="artifact-copy">Ready for bank upload only when the run passes without blocking errors.</div>
+                <div class="artifact-copy">This file is available only when the run passes without blocking issues and is ready for bank upload.</div>
             </div>
             """,
             unsafe_allow_html=True,
@@ -871,7 +879,7 @@ def render_results() -> None:
                 use_container_width=True,
             )
         else:
-            st.button("ACH file unavailable", disabled=True, use_container_width=True)
+            st.button("ACH file not available", disabled=True, use_container_width=True)
     with download_col2:
         st.markdown(
             """
@@ -947,7 +955,7 @@ def render_help() -> None:
         )
 
     st.warning(
-        "ACHLint validates structural and formatting issues for the supported ACH file type. Bank-specific policies, cutoffs, and authorization requirements still apply."
+        "ACHLint checks structural and formatting issues for the supported ACH file type. Bank-specific policies, cutoffs, and authorization requirements still apply."
     )
     render_section_card(
         "Recommended workflow",
@@ -970,11 +978,11 @@ def render_onboarding_tour() -> None:
         return
 
     st.markdown(
-        """
+        f"""
         <div class="tutorial-card">
-            <div class="tutorial-title">First time using ACHLint?</div>
+            <div class="tutorial-title">{UI_COPY["tour_title"]}</div>
             <div class="tutorial-copy">
-                You do not need to understand NACHA record structure to succeed here. Follow this simple path and the product will tell you what to fix before you generate anything.
+                {UI_COPY["tour_body"]}
             </div>
             <div class="tutorial-steps">
                 <div class="tutorial-step">
@@ -999,28 +1007,28 @@ def render_onboarding_tour() -> None:
     )
     c1, c2, c3 = st.columns([1, 1, 2.2])
     with c1:
-        if st.button("Start guided flow", use_container_width=True, type="primary", key="tour_start"):
+        if st.button(UI_COPY["tour_start"], use_container_width=True, type="primary", key="tour_start"):
             st.session_state["show_tour"] = False
             st.session_state["page"] = "Generate"
             st.rerun()
     with c2:
-        if st.button("Hide tutorial", use_container_width=True, key="tour_hide"):
+        if st.button(UI_COPY["tour_hide"], use_container_width=True, key="tour_hide"):
             st.session_state["show_tour"] = False
             st.rerun()
     with c3:
-        st.caption("You can reopen this tutorial anytime from the Help page.")
+        st.caption("You can reopen this guide anytime from the Help page.")
 
 
 def render_generate_helper() -> None:
-    with st.expander("Quick guide: how Generate mode works", expanded=False):
+    with st.expander("Quick guide: how Generate works", expanded=False):
         st.write("1. Upload the CSV template with your payment rows.")
-        st.write("2. Save your originator settings for this session.")
+        st.write("2. Save your settings for this session.")
         st.write("3. Check the Readiness Review panel for blocking errors.")
-        st.write("4. Generate artifacts only when the error count is zero.")
+        st.write("4. Generate artifacts only when blocking issues are cleared.")
 
 
 def render_validate_helper() -> None:
-    with st.expander("Quick guide: how Validate mode works", expanded=False):
+    with st.expander("Quick guide: how Validate works", expanded=False):
         st.write("1. Upload an existing `.ach` file.")
         st.write("2. Run validation to inspect structure, totals, and padding.")
         st.write("3. Download the report and exceptions CSV if you need to fix the file.")
@@ -1066,7 +1074,7 @@ def render_originator_form() -> OriginatorConfig:
                 value=int(values["trace_number_start"]),
             )
 
-        saved = st.form_submit_button("Save settings", use_container_width=True)
+        saved = st.form_submit_button("Save settings for this session", use_container_width=True)
 
     if saved:
         st.session_state["originator_config_values"] = {
@@ -1085,7 +1093,7 @@ def render_originator_form() -> OriginatorConfig:
             "reference_code": reference_code,
             "trace_number_start": int(trace_number_start),
         }
-        st.success("Originator settings saved for this session.")
+        st.success(UI_COPY["settings_saved"])
         values = st.session_state["originator_config_values"]
     else:
         company_discretionary_data = values["company_discretionary_data"]
@@ -1152,7 +1160,7 @@ def render_generate_wizard(step: int, has_csv: bool, preview_issues: list[Valida
             <div class="wizard-step {step3_class}">
                 <div class="wizard-step-number">3</div>
                 <div class="wizard-step-title">Review and generate</div>
-                <div class="wizard-step-copy">Check readiness, then generate only when the file is clean.</div>
+                <div class="wizard-step-copy">Check readiness, then generate only when blocking issues are cleared.</div>
             </div>
         </div>
         """,
@@ -1167,7 +1175,7 @@ def render_generate_upload_step(csv_file, preview_rows: list, preview_issues: li
         st.markdown('<div class="step-pill">Step 1</div>', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Upload your payment CSV</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="section-copy">Start with the ACHLint template if you want the least friction on your first run.</div>',
+            '<div class="section-copy">Start with the ACHLint template if you want the clearest path on your first run.</div>',
             unsafe_allow_html=True,
         )
         st.download_button(
@@ -1179,9 +1187,9 @@ def render_generate_upload_step(csv_file, preview_rows: list, preview_issues: li
             key="download_template_step1",
         )
         if csv_file is None:
-            render_empty_state("Waiting for your file", "Use the uploader above to bring in your payment CSV and continue.")
+            render_empty_state("Upload required", "Use the uploader above to bring in your payment CSV. Once the file is in place, you can continue to settings.")
         else:
-            st.success("CSV uploaded. You can review the preview on the right and continue to settings.")
+            st.success("Your CSV is in place. Review the preview on the right, then continue to settings.")
             if st.button("Continue to settings", type="primary", use_container_width=True, key="continue_step2"):
                 st.session_state["generate_step"] = 2
                 st.rerun()
@@ -1190,13 +1198,13 @@ def render_generate_upload_step(csv_file, preview_rows: list, preview_issues: li
         st.markdown('<div class="workspace-card">', unsafe_allow_html=True)
         st.markdown('<div class="section-title">CSV preview</div>', unsafe_allow_html=True)
         if csv_file is None:
-            render_empty_state("No preview yet", "Once a CSV is uploaded, ACHLint will show row counts, totals, and any issues here.")
+            render_empty_state("No preview yet", "Once you upload a CSV, ACHLint will show row counts, totals, and any blocking issues here.")
         else:
             render_summary_metrics(
                 [
                     ("Rows parsed", str(len(preview_rows))),
                     ("Total credit", f"${sum(float(row.amount) for row in preview_rows):,.2f}"),
-                    ("Errors", str(count_issues(preview_issues, "error"))),
+                    ("Blocking issues", str(count_issues(preview_issues, "error"))),
                     ("Warnings", str(count_issues(preview_issues, "warning"))),
                 ]
             )
@@ -1216,13 +1224,13 @@ def render_generate_upload_step(csv_file, preview_rows: list, preview_issues: li
                     use_container_width=True,
                     hide_index=True,
                 )
-            render_issue_groups(preview_issues, empty_message="Your CSV preview looks clean so far.")
+            render_issue_groups(preview_issues, empty_message="Your CSV preview looks clean so far. You can continue to settings.")
         st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_generate_settings_step(csv_file) -> None:
     if csv_file is None:
-        render_empty_state("Upload required first", "Start with Step 1 so ACHLint has a CSV to work from before you configure the file.")
+        render_empty_state("Upload required first", "Start with Step 1 so ACHLint has a payment CSV to work from before you review settings.")
         if st.button("Go to upload step", use_container_width=True, key="back_to_upload_from_settings"):
             st.session_state["generate_step"] = 1
             st.rerun()
@@ -1234,7 +1242,7 @@ def render_generate_settings_step(csv_file) -> None:
         st.markdown('<div class="step-pill">Step 2</div>', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Originator settings</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="section-copy">These values are used in the ACH file header and batch header. Save them once, then move to review.</div>',
+            '<div class="section-copy">These values are used in the ACH file header and batch header. Save them for this session, then move to review.</div>',
             unsafe_allow_html=True,
         )
         render_originator_form()
@@ -1263,7 +1271,7 @@ def render_generate_settings_step(csv_file) -> None:
 
 def render_generate_review_step(csv_file, preview_rows: list, preview_issues: list[ValidationIssue], config: OriginatorConfig) -> None:
     if csv_file is None:
-        render_empty_state("Upload required first", "Step 3 only works after you upload a CSV and confirm your settings.")
+        render_empty_state("Upload required first", "Step 3 works after you upload a CSV and confirm your settings for this session.")
         if st.button("Go to upload step", use_container_width=True, key="back_to_upload_from_review"):
             st.session_state["generate_step"] = 1
             st.rerun()
@@ -1275,18 +1283,18 @@ def render_generate_review_step(csv_file, preview_rows: list, preview_issues: li
         st.markdown('<div class="step-pill">Step 3</div>', unsafe_allow_html=True)
         st.markdown('<div class="section-title">Readiness review</div>', unsafe_allow_html=True)
         st.markdown(
-            '<div class="section-copy">This is the final check before generation. If blocking errors remain, fix them first.</div>',
+            '<div class="section-copy">This is the final check before generation. If blocking issues remain, fix them before you generate.</div>',
             unsafe_allow_html=True,
         )
         render_summary_metrics(
             [
                 ("Rows parsed", str(len(preview_rows))),
                 ("Total credit", f"${sum(float(row.amount) for row in preview_rows):,.2f}"),
-                ("Errors", str(count_issues(preview_issues, "error"))),
+                ("Blocking issues", str(count_issues(preview_issues, "error"))),
                 ("Warnings", str(count_issues(preview_issues, "warning"))),
             ]
         )
-        render_issue_groups(preview_issues, empty_message="Your CSV is ready for generation.")
+        render_issue_groups(preview_issues, empty_message="Your CSV is ready for generation. You can generate artifacts when you are ready.")
         st.markdown("</div>", unsafe_allow_html=True)
     with right:
         st.markdown('<div class="workspace-card">', unsafe_allow_html=True)
@@ -1302,7 +1310,7 @@ def render_generate_review_step(csv_file, preview_rows: list, preview_issues: li
             st.session_state["generate_step"] = 2
             st.rerun()
         if st.button("Generate ACH artifacts", type="primary", use_container_width=True, disabled=generate_disabled, key="generate_final"):
-            with st.spinner("Generating ACH file and validation artifacts..."):
+            with st.spinner(UI_COPY["generate_loading"]):
                 result = handle_generate(csv_file.getvalue(), config)
             st.session_state["latest_result"] = result
             st.session_state["page"] = "Results"
@@ -1388,13 +1396,13 @@ def render_issue_groups(issues: Iterable[ValidationIssue], *, empty_message: str
         grouped[issue.severity].append(issue)
 
     if grouped.get("error"):
-        st.error(f"{len(grouped['error'])} blocking error(s) need attention before this run can pass.")
+        st.error(issue_summary_copy("error", len(grouped["error"])))
         st.dataframe([issue_to_row(issue) for issue in grouped["error"]], use_container_width=True, hide_index=True)
     if grouped.get("warning"):
-        st.warning(f"{len(grouped['warning'])} warning(s) should be reviewed.")
+        st.warning(issue_summary_copy("warning", len(grouped["warning"])))
         st.dataframe([issue_to_row(issue) for issue in grouped["warning"]], use_container_width=True, hide_index=True)
     if grouped.get("info"):
-        st.info(f"{len(grouped['info'])} informational note(s).")
+        st.info(issue_summary_copy("info", len(grouped["info"])))
         st.dataframe([issue_to_row(issue) for issue in grouped["info"]], use_container_width=True, hide_index=True)
 
 
@@ -1405,12 +1413,12 @@ def issue_to_row(issue: ValidationIssue) -> dict[str, object]:
     if issue.line_number:
         location.append(f"Line {issue.line_number}")
     return {
-        "Severity": issue.severity.title(),
+        "Severity": ISSUE_TITLE_MAP.get(issue.severity, issue.severity.title()),
         "Code": issue.code,
         "Location": " / ".join(location),
         "Field": issue.field or "",
-        "Message": issue.message,
-        "Suggested fix": issue.suggested_fix or "",
+        "What happened": issue_display_message(issue),
+        "Next step": issue_next_step_copy(issue),
         "Original value": issue.original_value or "",
     }
 
@@ -1423,19 +1431,19 @@ def result_banner(result: BuildResult | ValidationResult) -> tuple[str, str, str
     if result.status == "success" or result.status == "pass":
         return (
             "status-success",
-            "Your file passed validation.",
-            "You can download the artifacts below and move into your bank upload workflow with much more confidence.",
+            UI_COPY["results_pass_title"],
+            UI_COPY["results_pass_body"],
         )
     if result.status == "pass_with_warnings":
         return (
             "status-warning",
-            "Your file is structurally valid, with warnings to review.",
-            "The file passed core validation, but there are advisory notes worth checking before upload.",
+            UI_COPY["results_warning_title"],
+            UI_COPY["results_warning_body"],
         )
     return (
         "status-fail",
-        "This run has blocking issues.",
-        "Review the grouped errors below, fix the source data or file structure, and run validation again before uploading anything.",
+        UI_COPY["results_fail_title"],
+        UI_COPY["results_fail_body"],
     )
 
 
