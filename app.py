@@ -65,35 +65,46 @@ def inject_styles() -> None:
         <style>
         @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,400;8..144,500;8..144,700;8..144,800&family=Roboto+Mono:wght@500&display=swap');
         :root {
-            --md-primary: #335d50;
-            --md-on-primary: #ffffff;
-            --md-primary-container: #d7eadf;
-            --md-on-primary-container: #0f1f18;
-            --md-secondary: #4a6359;
-            --md-secondary-container: #dce8e1;
-            --md-tertiary: #6c5b2f;
-            --md-tertiary-container: #f5e4a7;
-            --md-error: #b3261e;
-            --md-error-container: #f9dedc;
-            --md-surface: #f8faf7;
-            --md-surface-soft: #f1f5f1;
-            --md-surface-container: rgba(255, 255, 255, 0.82);
-            --md-surface-container-high: rgba(255, 255, 255, 0.94);
-            --md-outline: rgba(26, 45, 38, 0.14);
-            --md-outline-strong: rgba(26, 45, 38, 0.22);
-            --md-text: #17221d;
-            --md-text-soft: #54675f;
-            --md-text-muted: #6c7f77;
-            --md-shadow: 0 18px 44px rgba(18, 41, 33, 0.08);
-            --md-radius-lg: 20px;
-            --md-radius-md: 16px;
-            --md-radius-sm: 12px;
+            --md-primary: #6750A4;
+            --md-on-primary: #FFFFFF;
+            --md-primary-container: #EADDFF;
+            --md-on-primary-container: #21005D;
+            --md-secondary: #625B71;
+            --md-on-secondary: #FFFFFF;
+            --md-secondary-container: #E8DEF8;
+            --md-on-secondary-container: #1D192B;
+            --md-tertiary: #7D5260;
+            --md-on-tertiary: #FFFFFF;
+            --md-tertiary-container: #FFD8E4;
+            --md-on-tertiary-container: #31111D;
+            --md-error: #B3261E;
+            --md-on-error: #FFFFFF;
+            --md-error-container: #F9DEDC;
+            --md-on-error-container: #410E0B;
+            --md-surface: #FFFBFE;
+            --md-on-surface: #1C1B1F;
+            --md-surface-variant: #E7E0EC;
+            --md-on-surface-variant: #49454F;
+            --md-outline: #79747E;
+            --md-shadow: 0 18px 44px rgba(0, 0, 0, 0.08);
+            --md-radius-lg: 16px;
+            --md-radius-md: 12px;
+            --md-radius-sm: 8px;
+            
+            --md-surface-soft: #F3EDF7;
+            --md-surface-container: rgba(255, 251, 254, 0.82);
+            --md-surface-container-high: rgba(255, 251, 254, 0.94);
+            --md-outline-strong: #49454F;
+            --md-text: #1C1B1F;
+            --md-text-soft: #49454F;
+            --md-text-muted: #625B71;
+
         }
         .stApp {
             background:
-                radial-gradient(circle at top right, rgba(51, 93, 80, 0.12), transparent 24%),
-                radial-gradient(circle at 10% 20%, rgba(235, 224, 176, 0.22), transparent 18%),
-                linear-gradient(180deg, #f7faf7 0%, #eef3ef 100%);
+                radial-gradient(circle at top right, rgba(103, 80, 164, 0.12), transparent 24%),
+                radial-gradient(circle at 10% 20%, rgba(125, 82, 96, 0.22), transparent 18%),
+                linear-gradient(180deg, #FFFBFE 0%, #E7E0EC 100%);
             color: var(--md-text);
             font-family: "Roboto Flex", "Inter", sans-serif;
         }
@@ -671,16 +682,16 @@ def inject_styles() -> None:
             transition: transform 120ms ease, box-shadow 120ms ease, border-color 120ms ease, background 120ms ease;
         }
         .stButton > button[kind="primary"], .stDownloadButton > button[kind="primary"] {
-            background: linear-gradient(180deg, var(--md-primary) 0%, #24483d 100%);
+            background: var(--md-primary);
             color: var(--md-on-primary);
-            border: 1px solid #24483d;
-            box-shadow: 0 14px 30px rgba(36, 72, 61, 0.24);
+            border: 1px solid var(--md-primary);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px 1px rgba(0, 0, 0, 0.15);
         }
         .stButton > button[kind="primary"]:hover, .stDownloadButton > button[kind="primary"]:hover {
-            border-color: #1b382f;
-            background: linear-gradient(180deg, #30564a 0%, #1b382f 100%);
+            background: #5A4499; /* A slightly darker version of --md-primary */
             color: var(--md-on-primary);
             transform: translateY(-1px);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 2px 6px 2px rgba(0, 0, 0, 0.15);
         }
         .stButton > button[kind="secondary"] {
             border: 1px solid var(--md-outline);
@@ -721,14 +732,14 @@ def inject_styles() -> None:
         }
         div[data-testid="stFileUploaderDropzone"] {
             border-radius: 20px;
-            border: 1.5px dashed rgba(51, 93, 80, 0.35);
-            background: linear-gradient(180deg, #fcfefd 0%, #f3f8f5 100%);
+            border: 1.5px dashed var(--md-outline);
+            background: linear-gradient(180deg, var(--md-surface) 0%, var(--md-surface-soft) 100%);
             padding-top: 1.1rem;
             padding-bottom: 1.1rem;
         }
         div[data-testid="stFileUploaderDropzone"]:hover {
-            border-color: rgba(51, 93, 80, 0.55);
-            background: linear-gradient(180deg, #fbfefc 0%, #eef6f1 100%);
+            border-color: var(--md-primary);
+            background: linear-gradient(180deg, var(--md-surface-soft) 0%, var(--md-surface-variant) 100%);
         }
         div[data-testid="stDataFrame"] {
             border-radius: 18px;
