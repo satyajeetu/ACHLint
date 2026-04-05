@@ -143,23 +143,23 @@ export default function Home() {
   const warnings = csvIssues.filter((issue) => issue.severity === "warning").length;
 
   return (
-    <main className="min-h-screen bg-white px-4 py-6 text-[#1F1F1C] sm:px-6 lg:px-10">
+    <main className="min-h-screen bg-[var(--md-sys-color-background)] px-4 py-6 text-[var(--md-sys-color-on-background)] sm:px-6 lg:px-10">
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
         <header className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
           <GlassCard>
-            <div className="text-[32px] font-bold tracking-[-0.02em] text-[#1F1F1C]">ACHLint</div>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-[#4F4E48]">
+            <div className="text-[32px] font-bold tracking-[-0.02em] text-[var(--md-sys-color-on-surface)]">ACHLint</div>
+            <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">
               A focused ACH file workspace for spreadsheet-driven payroll and payout operations.
             </p>
           </GlassCard>
-          <GlassCard className="text-sm leading-6 text-[#4F4E48]">
-            <strong className="text-[#1F1F1C]">Focused scope.</strong> PPD credits only.
+          <GlassCard className="text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">
+            <strong className="text-[var(--md-sys-color-on-surface)]">Focused scope.</strong> PPD credits only.
             One batch per file. Validation happens before ACH download so operators can catch
             issues earlier.
           </GlassCard>
         </header>
 
-        <nav className="grid gap-2 border-b border-[#E7E3DB] pb-3 sm:grid-cols-5" aria-label="Primary">
+        <nav className="grid gap-2 border-b border-[var(--md-sys-color-outline-variant)] pb-3 sm:grid-cols-5" aria-label="Primary">
           {NAV_ITEMS.map((item) => (
             <button
               key={item.id}
@@ -167,8 +167,8 @@ export default function Home() {
               onClick={() => setActivePage(item.id)}
               className={`rounded-lg border px-4 py-3 text-sm font-medium transition ${
                 activePage === item.id
-                  ? "border-[#F36B21] bg-[#FDE7DB] text-[#1F1F1C]"
-                  : "border-[#D7D2C7] bg-white text-[#4F4E48] hover:border-[#A8A293] hover:bg-[#FCFBF9]"
+                  ? "border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)] text-[var(--md-sys-color-on-primary-container)]"
+                  : "border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] text-[var(--md-sys-color-on-surface-variant)] hover:border-[var(--md-sys-color-primary)] hover:bg-[var(--md-sys-color-surface-variant)]"
               }`}
             >
               {item.label}
@@ -182,21 +182,21 @@ export default function Home() {
           <div className="space-y-4">
             <section>
               <GlassCard className="relative overflow-hidden">
-                <div className="inline-flex items-center gap-2 rounded-md border border-[#F8B089] bg-[#FDE7DB] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#D95A16]">
+                <div className="inline-flex items-center gap-2 rounded-md border border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--md-sys-color-on-primary-container)]">
                   <Sparkles className="h-3.5 w-3.5" />
                   {UI_COPY.landingEyebrow}
                 </div>
-                <p className="mt-6 max-w-2xl text-lg leading-8 text-[#4F4E48]">
+                <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--md-sys-color-on-surface-variant)]">
                   {UI_COPY.landingProblem}
                 </p>
-                <h1 className="mt-4 max-w-4xl text-4xl font-bold tracking-[-0.02em] text-[#1F1F1C] sm:text-5xl">
+                <h1 className="mt-4 max-w-4xl text-4xl font-bold tracking-[-0.02em] text-[var(--md-sys-color-on-surface)] sm:text-5xl">
                   {UI_COPY.landingTitle}
                 </h1>
-                <p className="mt-4 max-w-3xl text-base leading-8 text-[#4F4E48]">
+                <p className="mt-4 max-w-3xl text-base leading-8 text-[var(--md-sys-color-on-surface-variant)]">
                   {UI_COPY.landingBody}
                 </p>
-                <div className="mt-5 text-sm leading-6 text-[#76746B]">{UI_COPY.landingProof}</div>
-                <div className="mt-2 text-sm leading-6 text-[#4F4E48]">{UI_COPY.landingNote}</div>
+                <div className="mt-5 text-sm leading-6 text-[var(--text-tertiary)]">{UI_COPY.landingProof}</div>
+                <div className="mt-2 text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{UI_COPY.landingNote}</div>
                 <div className="mt-8 grid gap-3 md:grid-cols-[1.15fr_1fr_1fr]">
                   <PrimaryButton
                     onClick={() => {
@@ -789,20 +789,20 @@ function ResultHero({ result }: { result: AppResult }) {
   const banner = resultBanner(result);
 
   return (
-    <GlassCard className="overflow-hidden border-t-2 border-t-[#F36B21]">
+    <GlassCard className="overflow-hidden border-t-2 border-t-[var(--md-sys-color-primary)]">
       <div
         className={`inline-flex rounded-md border px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] ${
           banner.tone === "success"
-            ? "border-[#8FB5AC] bg-[#E6F0ED] text-[#183B35]"
+            ? "border-[var(--md-sys-color-secondary)] bg-[var(--md-sys-color-secondary-container)] text-[var(--md-sys-color-on-secondary-container)]"
             : banner.tone === "warning"
-              ? "border-[#D9A441] bg-[#FBF1DD] text-[#A7771D]"
-              : "border-[#D65A4A] bg-[#FBE7E4] text-[#B63E2E]"
+              ? "border-[var(--md-sys-color-outline)] bg-[var(--surface-muted)] text-[var(--md-sys-color-on-surface)]"
+              : "border-[var(--md-sys-color-error)] bg-[var(--md-sys-color-error-container)] text-[var(--md-sys-color-on-error-container)]"
         }`}
       >
         {result.status.replaceAll("_", " ")}
       </div>
-      <h2 className="mt-4 text-3xl font-bold tracking-[-0.015em] text-[#1F1F1C]">{banner.title}</h2>
-      <p className="mt-3 max-w-3xl text-base leading-8 text-[#4F4E48]">{banner.body}</p>
+      <h2 className="mt-4 text-3xl font-bold tracking-[-0.015em] text-[var(--md-sys-color-on-surface)]">{banner.title}</h2>
+      <p className="mt-3 max-w-3xl text-base leading-8 text-[var(--md-sys-color-on-surface-variant)]">{banner.body}</p>
     </GlassCard>
   );
 }
@@ -828,25 +828,25 @@ function IssueGroups({
             <div
               className={`rounded-3xl border p-4 ${
                 severity === "error"
-                  ? "border-rose-200 bg-rose-50"
+                  ? "border-[var(--md-sys-color-error)] bg-[var(--md-sys-color-error-container)]"
                   : severity === "warning"
-                    ? "border-amber-200 bg-amber-50"
-                    : "border-emerald-200 bg-emerald-50"
+                    ? "border-[var(--md-sys-color-outline)] bg-[var(--surface-muted)]"
+                    : "border-[var(--md-sys-color-secondary)] bg-[var(--md-sys-color-secondary-container)]"
               }`}
             >
-              <div className="text-sm font-bold uppercase tracking-[0.18em] text-slate-900">
+              <div className="text-sm font-bold uppercase tracking-[0.18em] text-[var(--md-sys-color-on-surface)]">
                 {severity === "error"
                   ? "Blocking issues"
                   : severity === "warning"
                     ? "Warnings to review"
                     : "Informational notes"}
               </div>
-              <div className="mt-1 text-sm leading-6 text-slate-700">
+              <div className="mt-1 text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">
                 {issueSummaryCopy(severity, groups[severity].length)}
               </div>
             </div>
-            <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white/90">
-              <div className="hidden grid-cols-[110px_110px_120px_120px_1fr_1fr] border-b border-slate-200 bg-slate-50 px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-slate-500 lg:grid">
+            <div className="overflow-hidden rounded-3xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)]/90">
+              <div className="hidden grid-cols-[110px_110px_120px_120px_1fr_1fr] border-b border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)] px-4 py-3 text-xs font-bold uppercase tracking-[0.16em] text-[var(--text-tertiary)] lg:grid">
                 <div>Severity</div>
                 <div>Code</div>
                 <div>Location</div>
@@ -857,7 +857,7 @@ function IssueGroups({
               {groups[severity].map((issue, index) => (
                 <div
                   key={`${issue.code}-${issue.rowNumber ?? issue.lineNumber ?? index}`}
-                  className="grid gap-3 border-t border-slate-100 px-4 py-4 first:border-t-0 lg:grid-cols-[110px_110px_120px_120px_1fr_1fr]"
+                  className="grid gap-3 border-t border-[var(--md-sys-color-outline-variant)] px-4 py-4 first:border-t-0 lg:grid-cols-[110px_110px_120px_120px_1fr_1fr]"
                 >
                   <Cell label="Severity">{severity}</Cell>
                   <Cell label="Code">{issue.code}</Cell>
@@ -882,17 +882,17 @@ function BusyBar({ label }: { label: string }) {
     <motion.div
       initial={{ opacity: 0, y: -4 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl border border-[#E7E3DB] bg-[#FCFBF9] p-4 shadow-none"
+      className="rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)] p-4 shadow-none"
     >
       <div className="flex items-center gap-3">
-        <div className="h-2 flex-1 overflow-hidden rounded-sm bg-[#F1EFEA]">
+        <div className="h-2 flex-1 overflow-hidden rounded-sm bg-[var(--md-sys-color-surface-variant)]">
           <motion.div
             animate={{ x: ["-10%", "60%"] }}
             transition={{ repeat: Number.POSITIVE_INFINITY, duration: 1.8, ease: "easeInOut" }}
-            className="h-full w-1/3 rounded-sm bg-[#F36B21]"
+            className="h-full w-1/3 rounded-sm bg-[var(--md-sys-color-primary)]"
           />
         </div>
-        <div className="text-sm font-medium text-[#4F4E48]">{label}</div>
+        <div className="text-sm font-medium text-[var(--md-sys-color-on-surface-variant)]">{label}</div>
       </div>
     </motion.div>
   );
@@ -908,10 +908,10 @@ function SectionIntro({
   body: string;
 }) {
   return (
-    <GlassCard className="border-t-2 border-t-[#F36B21]">
-      <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[#D95A16]">{eyebrow}</div>
-      <h1 className="mt-3 text-3xl font-bold tracking-[-0.015em] text-[#1F1F1C]">{title}</h1>
-      <p className="mt-3 max-w-3xl text-sm leading-7 text-[#4F4E48]">{body}</p>
+    <GlassCard className="border-t-2 border-t-[var(--md-sys-color-primary)]">
+      <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--md-sys-color-primary)]">{eyebrow}</div>
+      <h1 className="mt-3 text-3xl font-bold tracking-[-0.015em] text-[var(--md-sys-color-on-surface)]">{title}</h1>
+      <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
     </GlassCard>
   );
 }
@@ -924,7 +924,9 @@ function GlassCard({
   className?: string;
 }) {
   return (
-    <div className={`rounded-xl border border-[#E7E3DB] bg-white p-6 shadow-[0_1px_2px_rgba(31,31,28,0.06)] ${className}`}>
+    <div
+      className={`rounded-[var(--md-sys-shape-corner-medium)] border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] p-6 shadow-[var(--md-elevation-1)] ${className}`}
+    >
       {children}
     </div>
   );
@@ -941,8 +943,8 @@ function ArtifactCard({
 }) {
   return (
     <GlassCard className="space-y-4">
-      <div className="text-lg font-semibold text-[#1F1F1C]">{title}</div>
-      <p className="text-sm leading-6 text-[#4F4E48]">{body}</p>
+      <div className="text-lg font-semibold text-[var(--md-sys-color-on-surface)]">{title}</div>
+      <p className="text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
       {action}
     </GlassCard>
   );
@@ -950,9 +952,9 @@ function ArtifactCard({
 
 function EmptyState({ title, body }: { title: string; body: string }) {
   return (
-    <div className="rounded-lg border border-[#E7E3DB] bg-[#F7F6F3] p-5">
-      <div className="text-base font-semibold text-[#1F1F1C]">{title}</div>
-      <p className="mt-2 text-sm leading-6 text-[#4F4E48]">{body}</p>
+    <div className="rounded-lg border border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)] p-5">
+      <div className="text-base font-semibold text-[var(--md-sys-color-on-surface)]">{title}</div>
+      <p className="mt-2 text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
     </div>
   );
 }
@@ -968,9 +970,9 @@ function FunnelCard({
 }) {
   return (
     <GlassCard>
-      <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[#D95A16]">{step}</div>
-      <div className="mt-3 text-lg font-semibold text-[#1F1F1C]">{title}</div>
-      <p className="mt-2 text-sm leading-6 text-[#4F4E48]">{body}</p>
+      <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--md-sys-color-primary)]">{step}</div>
+      <div className="mt-3 text-lg font-semibold text-[var(--md-sys-color-on-surface)]">{title}</div>
+      <p className="mt-2 text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
     </GlassCard>
   );
 }
@@ -992,28 +994,32 @@ function WizardStep({
     <div
       className={`rounded-xl border p-5 ${
         active
-          ? "border-[#F8B089] bg-[#FDE7DB]"
+          ? "border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)]"
           : done
-            ? "border-[#E7E3DB] bg-[#FCFBF9]"
-            : "border-[#E7E3DB] bg-white"
+            ? "border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)]"
+            : "border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)]"
       }`}
     >
       <div
         className={`inline-flex h-9 w-9 items-center justify-center rounded-md text-sm font-semibold ${
-          active ? "bg-[#F36B21] text-white" : done ? "bg-[#1F1F1C] text-white" : "bg-[#F1EFEA] text-[#4F4E48]"
+          active
+            ? "bg-[var(--md-sys-color-primary)] text-[var(--md-sys-color-on-primary)]"
+            : done
+              ? "bg-[var(--md-sys-color-secondary)] text-[var(--md-sys-color-on-secondary)]"
+              : "bg-[var(--md-sys-color-surface-variant)] text-[var(--md-sys-color-on-surface-variant)]"
         }`}
       >
         {index}
       </div>
-      <div className="mt-4 text-base font-semibold text-[#1F1F1C]">{title}</div>
-      <p className="mt-2 text-sm leading-6 text-[#4F4E48]">{body}</p>
+      <div className="mt-4 text-base font-semibold text-[var(--md-sys-color-on-surface)]">{title}</div>
+      <p className="mt-2 text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{body}</p>
     </div>
   );
 }
 
 function StepBadge({ children }: { children: React.ReactNode }) {
   return (
-    <div className="inline-flex rounded-md border border-[#F8B089] bg-[#FDE7DB] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#D95A16]">
+    <div className="inline-flex rounded-md border border-[var(--md-sys-color-primary)] bg-[var(--md-sys-color-primary-container)] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[var(--md-sys-color-on-primary-container)]">
       {children}
     </div>
   );
@@ -1027,9 +1033,9 @@ function MetricGrid({
   return (
     <div className="grid gap-3 md:grid-cols-4">
       {items.map((item) => (
-        <div key={item.label} className="rounded-xl border border-[#E7E3DB] bg-white p-5">
-          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[#76746B]">{item.label}</div>
-          <div className="mt-3 text-2xl font-bold tracking-[-0.015em] text-[#1F1F1C]">{item.value}</div>
+        <div key={item.label} className="rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)] p-5">
+          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">{item.label}</div>
+          <div className="mt-3 text-2xl font-bold tracking-[-0.015em] text-[var(--md-sys-color-on-surface)]">{item.value}</div>
         </div>
       ))}
     </div>
@@ -1040,9 +1046,9 @@ function FactGrid({ items }: { items: [string, string][] }) {
   return (
     <div className="grid gap-3 sm:grid-cols-2">
       {items.map(([label, value]) => (
-        <div key={label} className="rounded-xl border border-[#E7E3DB] bg-[#FCFBF9] p-5">
-          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[#76746B]">{label}</div>
-          <div className="mt-3 break-words font-mono text-sm font-semibold text-[#1F1F1C]">{value}</div>
+        <div key={label} className="rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)] p-5">
+          <div className="text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">{label}</div>
+          <div className="mt-3 break-words font-mono text-sm font-semibold text-[var(--md-sys-color-on-surface)]">{value}</div>
         </div>
       ))}
     </div>
@@ -1057,22 +1063,22 @@ function DataTable({
   rows: string[][];
 }) {
   return (
-    <div className="overflow-hidden rounded-xl border border-[#E7E3DB] bg-white">
-      <table className="min-w-full divide-y divide-[#E7E3DB]">
-        <thead className="bg-[#F7F6F3]">
+    <div className="overflow-hidden rounded-xl border border-[var(--md-sys-color-outline-variant)] bg-[var(--md-sys-color-surface)]">
+      <table className="min-w-full divide-y divide-[var(--md-sys-color-outline-variant)]">
+        <thead className="bg-[var(--surface-muted)]">
           <tr>
             {headers.map((header) => (
-              <th key={header} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-[#76746B]">
+              <th key={header} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)]">
                 {header}
               </th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-[#F1EFEA]">
+        <tbody className="divide-y divide-[var(--md-sys-color-outline-variant)]">
           {rows.map((row, index) => (
             <tr key={index}>
               {row.map((cell, cellIndex) => (
-                <td key={`${index}-${cellIndex}`} className="px-4 py-3 text-sm text-[#4F4E48]">
+                <td key={`${index}-${cellIndex}`} className="px-4 py-3 text-sm text-[var(--md-sys-color-on-surface-variant)]">
                   {cell}
                 </td>
               ))}
@@ -1087,10 +1093,10 @@ function DataTable({
 function Cell({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#76746B] lg:hidden">
+      <div className="mb-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-[var(--text-tertiary)] lg:hidden">
         {label}
       </div>
-      <div className="text-sm leading-6 text-[#4F4E48]">{children}</div>
+      <div className="text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">{children}</div>
     </div>
   );
 }
@@ -1104,8 +1110,8 @@ function Field({
 }) {
   return (
     <label className="block text-sm">
-      <span className="mb-2 block font-medium text-[#4F4E48]">{label}</span>
-      <div className="rounded-lg border border-[#D7D2C7] bg-white px-4 py-3 [&_input]:w-full [&_input]:bg-transparent [&_input]:outline-none">
+      <span className="mb-2 block font-medium text-[var(--md-sys-color-on-surface-variant)]">{label}</span>
+      <div className="rounded-lg border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-4 py-3 [&_input]:w-full [&_input]:bg-transparent [&_input]:text-[var(--md-sys-color-on-surface)] [&_input]:outline-none">
         {children}
       </div>
     </label>
@@ -1123,7 +1129,7 @@ function PrimaryButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[#F36B21] px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#D95A16]"
+      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-[var(--md-sys-color-primary)] px-6 py-3 text-sm font-semibold text-[var(--md-sys-color-on-primary)] transition hover:bg-[var(--brand-hover)]"
     >
       {children}
     </button>
@@ -1141,7 +1147,7 @@ function SecondaryButton({
     <button
       type="button"
       onClick={onClick}
-      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[#D7D2C7] bg-white px-6 py-3 text-sm font-medium text-[#1F1F1C] transition hover:bg-[#FCFBF9]"
+      className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg border border-[var(--md-sys-color-outline)] bg-[var(--md-sys-color-surface)] px-6 py-3 text-sm font-medium text-[var(--md-sys-color-on-surface)] transition hover:bg-[var(--surface-muted)]"
     >
       {children}
     </button>
@@ -1153,7 +1159,7 @@ function DisabledButton({ children }: { children: React.ReactNode }) {
     <button
       type="button"
       disabled
-      className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[#E7E3DB] bg-[#F7F6F3] px-6 py-3 text-sm font-medium text-[#A8A293]"
+      className="inline-flex min-h-12 items-center justify-center rounded-lg border border-[var(--md-sys-color-outline-variant)] bg-[var(--surface-muted)] px-6 py-3 text-sm font-medium text-[var(--text-tertiary)]"
     >
       {children}
     </button>

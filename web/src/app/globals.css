@@ -1,22 +1,122 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #1f1f1c;
-  --surface-subtle: #f7f6f3;
-  --surface-muted: #f1efea;
-  --border-subtle: #e7e3db;
-  --border-default: #d7d2c7;
-  --text-secondary: #4f4e48;
-  --text-tertiary: #76746b;
-  --brand: #f36b21;
-  --brand-hover: #d95a16;
+  color-scheme: light;
+
+  --md-ref-palette-primary-10: #21005d;
+  --md-ref-palette-primary-20: #381e72;
+  --md-ref-palette-primary-30: #4f378b;
+  --md-ref-palette-primary-40: #6750a4;
+  --md-ref-palette-primary-80: #d0bcff;
+  --md-ref-palette-primary-90: #eaddff;
+  --md-ref-palette-primary-100: #ffffff;
+
+  --md-ref-palette-secondary-10: #1d192b;
+  --md-ref-palette-secondary-30: #4a4458;
+  --md-ref-palette-secondary-40: #625b71;
+  --md-ref-palette-secondary-80: #ccc2dc;
+  --md-ref-palette-secondary-90: #e8def8;
+
+  --md-ref-palette-error-10: #410002;
+  --md-ref-palette-error-30: #8c1d18;
+  --md-ref-palette-error-40: #b3261e;
+  --md-ref-palette-error-80: #f2b8b5;
+  --md-ref-palette-error-90: #f9dedc;
+
+  --md-ref-palette-neutral-10: #1c1b1f;
+  --md-ref-palette-neutral-90: #e6e1e5;
+  --md-ref-palette-neutral-95: #f4eff4;
+  --md-ref-palette-neutral-98: #fef7ff;
+  --md-ref-palette-neutral-99: #fffbfe;
+  --md-ref-palette-neutral-100: #ffffff;
+
+  --md-ref-palette-neutral-variant-30: #49454f;
+  --md-ref-palette-neutral-variant-50: #79747e;
+  --md-ref-palette-neutral-variant-80: #cac4d0;
+  --md-ref-palette-neutral-variant-90: #e7e0ec;
+
+  --md-sys-color-primary: var(--md-ref-palette-primary-40);
+  --md-sys-color-on-primary: var(--md-ref-palette-primary-100);
+  --md-sys-color-primary-container: var(--md-ref-palette-primary-90);
+  --md-sys-color-on-primary-container: var(--md-ref-palette-primary-10);
+  --md-sys-color-secondary: var(--md-ref-palette-secondary-40);
+  --md-sys-color-on-secondary: var(--md-ref-palette-primary-100);
+  --md-sys-color-secondary-container: var(--md-ref-palette-secondary-90);
+  --md-sys-color-on-secondary-container: var(--md-ref-palette-secondary-10);
+  --md-sys-color-error: var(--md-ref-palette-error-40);
+  --md-sys-color-on-error: var(--md-ref-palette-primary-100);
+  --md-sys-color-error-container: var(--md-ref-palette-error-90);
+  --md-sys-color-on-error-container: var(--md-ref-palette-error-10);
+  --md-sys-color-background: var(--md-ref-palette-neutral-99);
+  --md-sys-color-on-background: var(--md-ref-palette-neutral-10);
+  --md-sys-color-surface: var(--md-ref-palette-neutral-99);
+  --md-sys-color-on-surface: var(--md-ref-palette-neutral-10);
+  --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant-90);
+  --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant-30);
+  --md-sys-color-outline: var(--md-ref-palette-neutral-variant-50);
+  --md-sys-color-outline-variant: var(--md-ref-palette-neutral-variant-80);
+
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-extra-large: 28px;
+
+  --md-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.12);
+  --md-elevation-2: 0 2px 6px rgba(0, 0, 0, 0.14);
+
+  --background: var(--md-sys-color-background);
+  --foreground: var(--md-sys-color-on-background);
+  --surface-subtle: var(--md-sys-color-surface-variant);
+  --surface-muted: var(--md-ref-palette-neutral-95);
+  --border-subtle: var(--md-sys-color-outline-variant);
+  --border-default: var(--md-sys-color-outline);
+  --text-secondary: var(--md-sys-color-on-surface-variant);
+  --text-tertiary: var(--md-ref-palette-neutral-variant-50);
+  --brand: var(--md-sys-color-primary);
+  --brand-hover: var(--md-ref-palette-primary-30);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    color-scheme: dark;
+
+    --md-sys-color-primary: var(--md-ref-palette-primary-80);
+    --md-sys-color-on-primary: var(--md-ref-palette-primary-20);
+    --md-sys-color-primary-container: var(--md-ref-palette-primary-30);
+    --md-sys-color-on-primary-container: var(--md-ref-palette-primary-90);
+    --md-sys-color-secondary: var(--md-ref-palette-secondary-80);
+    --md-sys-color-on-secondary: var(--md-ref-palette-primary-20);
+    --md-sys-color-secondary-container: var(--md-ref-palette-secondary-30);
+    --md-sys-color-on-secondary-container: var(--md-ref-palette-secondary-90);
+    --md-sys-color-error: var(--md-ref-palette-error-80);
+    --md-sys-color-on-error: #601410;
+    --md-sys-color-error-container: var(--md-ref-palette-error-30);
+    --md-sys-color-on-error-container: var(--md-ref-palette-error-90);
+    --md-sys-color-background: var(--md-ref-palette-neutral-10);
+    --md-sys-color-on-background: var(--md-ref-palette-neutral-90);
+    --md-sys-color-surface: var(--md-ref-palette-neutral-10);
+    --md-sys-color-on-surface: var(--md-ref-palette-neutral-90);
+    --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant-30);
+    --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant-80);
+    --md-sys-color-outline: var(--md-ref-palette-neutral-variant-50);
+    --md-sys-color-outline-variant: var(--md-ref-palette-neutral-variant-30);
+
+    --surface-muted: #211f26;
+    --border-subtle: var(--md-sys-color-outline-variant);
+    --border-default: var(--md-sys-color-outline);
+    --text-secondary: var(--md-sys-color-on-surface-variant);
+    --text-tertiary: var(--md-ref-palette-neutral-variant-80);
+    --brand-hover: var(--md-ref-palette-primary-90);
+    --md-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+    --md-elevation-2: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-inter);
+  --font-sans: var(--font-roboto);
   --font-mono: var(--font-roboto-mono);
 }
 
@@ -31,7 +131,7 @@ html {
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), Arial, Helvetica, sans-serif;
+  font-family: var(--font-roboto), Arial, Helvetica, sans-serif;
 }
 
 a,
@@ -55,10 +155,10 @@ textarea {
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 3px solid rgba(243, 107, 33, 0.22);
+  outline: 3px solid color-mix(in srgb, var(--md-sys-color-primary) 28%, transparent);
   outline-offset: 2px;
 }
 
 ::selection {
-  background: rgba(243, 107, 33, 0.16);
+  background: color-mix(in srgb, var(--md-sys-color-primary) 18%, transparent);
 }

@@ -1,10 +1,11 @@
-import type { Metadata } from "next";
-import { Inter, Roboto_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Roboto, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
-const sans = Inter({
-  variable: "--font-inter",
+const sans = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
+  weight: ["400", "500", "700"],
 });
 
 const mono = Roboto_Mono({
@@ -44,6 +45,13 @@ export const metadata: Metadata = {
     description:
       "Create ACH files from CSV and validate NACHA uploads before bank submission.",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#FFFBFE" },
+    { media: "(prefers-color-scheme: dark)", color: "#1C1B1F" },
+  ],
 };
 
 export default function RootLayout({
