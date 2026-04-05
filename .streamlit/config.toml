@@ -1,9 +1,0 @@
-[theme]
-primaryColor = "#6750A4" # M3 Baseline Primary
-backgroundColor = "#FDFBFF" # M3 Surface
-secondaryBackgroundColor = "#E6E1E5" # M3 Surface Variant
-textColor = "#1C1B1F" # M3 On Surface
-font = "sans serif"
-
-[server]
-headless = true

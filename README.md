@@ -37,11 +37,8 @@ Not supported today:
 ## Repository structure
 
 - [web/](/Users/satyajeetu/Desktop/ACHLint/web): primary frontend, built with Next.js, TypeScript, and Tailwind CSS
-- [achlint/](/Users/satyajeetu/Desktop/ACHLint/achlint): legacy Python ACH logic and reference implementation
-- [app.py](/Users/satyajeetu/Desktop/ACHLint/app.py): legacy Streamlit app
 - [.github/workflows/ci.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/ci.yml): CI checks
 - [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml): GitHub Pages deployment
-- [netlify.toml](/Users/satyajeetu/Desktop/ACHLint/netlify.toml): Netlify deployment config
 
 ## Run locally
 
@@ -61,22 +58,6 @@ Frontend checks:
 cd web
 npm run lint
 npm run build
-```
-
-Legacy Streamlit app:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-Legacy Python tests:
-
-```bash
-source .venv/bin/activate
-pytest
 ```
 
 ## Deployment options
@@ -100,29 +81,10 @@ Notes:
 - the GitHub Pages base path is set to `/ACHLint/`
 - if the repo name changes, update `repoName` in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts)
 
-### Netlify
-
-Setup:
-
-1. Push this repository to GitHub
-2. Import the repo into Netlify
-3. Netlify will read [netlify.toml](/Users/satyajeetu/Desktop/ACHLint/netlify.toml) and use:
-   - base directory: `web`
-   - build command: `npm run build`
-
-Recommended Netlify settings:
-- production branch: `main`
-- Node version: `22`
-
 ## CI/CD
 
 This project includes:
 - GitHub Actions CI on push and pull request
 - GitHub Pages deployment workflow
-- Netlify-compatible build configuration
 
-## Current implementation note
-
-The Next.js app in [web/](/Users/satyajeetu/Desktop/ACHLint/web) is the primary product surface now.
-
-The old Streamlit/Python implementation remains in the repo as a reference and fallback implementation, but it is no longer the recommended hosting path.
+The Next.js app in [web/](/Users/satyajeetu/Desktop/ACHLint/web) is the full product surface and the only supported hosting path in this repository.
