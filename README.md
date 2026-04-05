@@ -1,23 +1,51 @@
 # ACHLint
 
-ACHLint is a consumer-ready ACH utility for generating a strict PPD credits-only ACH/NACHA file from CSV input and validating uploaded ACH files.
+ACHLint is a lightweight ACH file generator and validator for spreadsheet-driven payroll and payout teams.
 
-## CI/CD and hosting
+It helps operators:
+- convert a strict CSV into a PPD credits-only ACH/NACHA file
+- validate an existing ACH file before bank upload
+- catch blocking issues earlier with plain-language feedback
+- download remediation artifacts such as an exceptions CSV and validation report
 
-This project is set up for:
+## Why this project exists
 
-- CI with GitHub Actions on every push to `main`/`master` and every pull request
-- CD through Netlify using the Next.js frontend in `web/`
-- Optional static hosting through GitHub Pages using the Next.js frontend in `web/`
+Most small teams do not need a full treasury platform. They need a reliable way to:
 
-The repository now has two app layers:
+1. prepare payout data in a spreadsheet
+2. turn it into a bank-ready ACH file
+3. validate the result before upload
 
-- `web/`: the Netlify-ready frontend built with Next.js, TypeScript, Tailwind CSS, and client-side ACH logic
-- `app.py` + `achlint/`: the legacy Streamlit/Python implementation retained as a reference while the new frontend becomes the primary deployment target
+ACHLint is intentionally narrow so the workflow stays understandable and trustworthy.
 
-Once this folder is pushed to GitHub, Netlify or GitHub Pages can auto-deploy new commits from your selected branch after the CI checks pass.
+## Product scope
 
-## Run the Netlify frontend locally
+Supported today:
+- PPD credits only
+- one batch per file
+- CSV-in to ACH-out generation
+- existing ACH file validation
+- operator-friendly issue reporting
+
+Not supported today:
+- debits
+- CCD, CTX, WEB, TEL, IAT
+- bank integrations or SFTP push
+- approval workflows
+- multi-batch authoring
+
+## Repository structure
+
+- [web/](/Users/satyajeetu/Desktop/ACHLint/web): primary frontend, built with Next.js, TypeScript, and Tailwind CSS
+- [achlint/](/Users/satyajeetu/Desktop/ACHLint/achlint): legacy Python ACH logic and reference implementation
+- [app.py](/Users/satyajeetu/Desktop/ACHLint/app.py): legacy Streamlit app
+- [.github/workflows/ci.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/ci.yml): CI checks
+- [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml): GitHub Pages deployment
+- [netlify.toml](/Users/satyajeetu/Desktop/ACHLint/netlify.toml): Netlify deployment config
+
+## Run locally
+
+Frontend:
 
 ```bash
 cd web
@@ -25,7 +53,9 @@ npm install
 npm run dev
 ```
 
-## Run frontend checks
+Open [http://localhost:3000](http://localhost:3000)
+
+Frontend checks:
 
 ```bash
 cd web
@@ -33,7 +63,7 @@ npm run lint
 npm run build
 ```
 
-## Run the legacy Python app locally
+Legacy Streamlit app:
 
 ```bash
 python3 -m venv .venv
@@ -42,50 +72,57 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Run legacy Python tests
+Legacy Python tests:
 
 ```bash
 source .venv/bin/activate
 pytest
 ```
 
-## Deploy to Netlify
+## Deployment options
 
-1. Push this repository to GitHub.
-2. In Netlify, choose `Add new project` and import the GitHub repo.
-3. Netlify will read `netlify.toml` and use:
-   - Base directory: `web`
-   - Build command: `npm run build`
-4. Deploy the site.
+### GitHub Pages
 
-### Recommended Netlify settings
+This repo is already configured for GitHub Pages at:
 
-- Production branch: `main`
-- Node version: `22` (already pinned in `netlify.toml`)
-- Build status checks: leave GitHub Actions enabled so Netlify deploys after frontend lint/build passes
+- [https://satyajeetu.github.io/ACHLint/](https://satyajeetu.github.io/ACHLint/)
 
-### Notes
+Setup:
 
-- The Netlify deployment target is the Next.js app in `web/`.
-- ACH generation and validation now run client-side in the frontend, which makes the product deployable on Netlify without a separate backend.
-- The old Streamlit app is still in the repo, but it is no longer the recommended hosting path.
+1. Push the latest code to `main`
+2. Open repository `Settings`
+3. Go to `Pages`
+4. Set `Source` to `GitHub Actions`
+5. GitHub will run the Pages workflow automatically on each push to `main`
 
-## Deploy to GitHub Pages
+Notes:
+- static export is configured in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts)
+- the GitHub Pages base path is set to `/ACHLint/`
+- if the repo name changes, update `repoName` in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts)
 
-This repo is primed for GitHub Pages at:
+### Netlify
 
-- `https://satyajeetu.github.io/ACHLint/`
+Setup:
 
-To enable it:
+1. Push this repository to GitHub
+2. Import the repo into Netlify
+3. Netlify will read [netlify.toml](/Users/satyajeetu/Desktop/ACHLint/netlify.toml) and use:
+   - base directory: `web`
+   - build command: `npm run build`
 
-1. Push the latest code to `main`.
-2. In GitHub, open the repository settings.
-3. Go to `Pages`.
-4. Under `Build and deployment`, set `Source` to `GitHub Actions`.
-5. The workflow in [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml) will build and publish the static site automatically on each push to `main`.
+Recommended Netlify settings:
+- production branch: `main`
+- Node version: `22`
 
-### GitHub Pages notes
+## CI/CD
 
-- The frontend is configured for static export in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts).
-- The GitHub Pages build uses the repository path prefix `/ACHLint/`, which matches the current repo name.
-- If you rename the repository, update the `repoName` value in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts).
+This project includes:
+- GitHub Actions CI on push and pull request
+- GitHub Pages deployment workflow
+- Netlify-compatible build configuration
+
+## Current implementation note
+
+The Next.js app in [web/](/Users/satyajeetu/Desktop/ACHLint/web) is the primary product surface now.
+
+The old Streamlit/Python implementation remains in the repo as a reference and fallback implementation, but it is no longer the recommended hosting path.

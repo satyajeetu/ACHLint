@@ -13,8 +13,37 @@ const mono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ACHLint",
-  description: "Generate and validate ACH files from spreadsheet-driven payroll and payout operations.",
+  metadataBase: new URL("https://satyajeetu.github.io/ACHLint/"),
+  title: "ACHLint | ACH File Generator and Validator",
+  description:
+    "Generate ACH files from CSV and validate NACHA uploads before bank submission. Built for spreadsheet-driven payroll and payout workflows.",
+  keywords: [
+    "ACH file generator",
+    "ACH validator",
+    "NACHA validator",
+    "CSV to ACH",
+    "ACH file builder",
+    "payroll ACH",
+    "payout operations",
+    "bank file validation",
+  ],
+  alternates: {
+    canonical: "https://satyajeetu.github.io/ACHLint/",
+  },
+  openGraph: {
+    title: "ACHLint | ACH File Generator and Validator",
+    description:
+      "Create ACH files from CSV and validate NACHA uploads before bank submission.",
+    url: "https://satyajeetu.github.io/ACHLint/",
+    siteName: "ACHLint",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ACHLint | ACH File Generator and Validator",
+    description:
+      "Create ACH files from CSV and validate NACHA uploads before bank submission.",
+  },
 };
 
 export default function RootLayout({

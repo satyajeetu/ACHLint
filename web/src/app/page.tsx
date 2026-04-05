@@ -213,6 +213,28 @@ export default function Home() {
               </GlassCard>
             </section>
 
+            <section className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
+              <GlassCard>
+                <h2 className="text-lg font-semibold text-[#1F1F1C]">
+                  ACH file generator for payroll and payout operations
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-[#4F4E48]">
+                  ACHLint is built for teams that prepare payment data in spreadsheets and need a
+                  faster way to create a valid ACH/NACHA file without learning low-level record
+                  formatting first.
+                </p>
+              </GlassCard>
+              <GlassCard>
+                <h2 className="text-lg font-semibold text-[#1F1F1C]">
+                  Validate NACHA files before bank upload
+                </h2>
+                <p className="mt-3 text-sm leading-7 text-[#4F4E48]">
+                  Upload an existing ACH file to inspect record length, record order, totals,
+                  padding, and other structural issues before the next submission attempt.
+                </p>
+              </GlassCard>
+            </section>
+
             <section className="grid gap-4 md:grid-cols-3">
               <FunnelCard
                 step="Step 1"
@@ -229,6 +251,27 @@ export default function Home() {
                 title="Download ready-to-use artifacts"
                 body="Leave with the ACH file, validation report, and exceptions CSV for follow-up."
               />
+            </section>
+
+            <section className="grid gap-4 md:grid-cols-2">
+              <GlassCard>
+                <h2 className="text-lg font-semibold text-[#1F1F1C]">What you get from each run</h2>
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-[#4F4E48]">
+                  <li>ACH file output when the run is clean</li>
+                  <li>Grouped blocking issues and warnings</li>
+                  <li>Exceptions CSV for remediation</li>
+                  <li>Validation report for operational review</li>
+                </ul>
+              </GlassCard>
+              <GlassCard>
+                <h2 className="text-lg font-semibold text-[#1F1F1C]">Current scope</h2>
+                <ul className="mt-4 space-y-3 text-sm leading-6 text-[#4F4E48]">
+                  <li>PPD credits only</li>
+                  <li>One batch per file</li>
+                  <li>CSV-in to ACH-out workflow</li>
+                  <li>ACH validator mode for existing files</li>
+                </ul>
+              </GlassCard>
             </section>
           </div>
         ) : null}
