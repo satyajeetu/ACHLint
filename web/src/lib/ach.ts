@@ -84,14 +84,14 @@ type ParsedCsvRecord = Record<string, string | undefined>;
 export const UI_COPY = {
   landingEyebrow: "ACH file generation without the guesswork",
   landingProblem:
-    "When a bank rejects your ACH file, payroll and payout operations stall. The pressure is high, the rules are rigid, and most teams are still working from spreadsheets.",
+    "Create and validate ACH files from a spreadsheet without learning NACHA formatting first.",
   landingTitle: "Turn your payment spreadsheet into a bank-accepted ACH file in minutes.",
   landingBody:
-    "ACHLint gives operators a focused path from CSV to validated ACH output. Upload your payment file, review blocking issues before upload, and leave with an ACH file, a validation report, and an exceptions CSV.",
+    "Upload your CSV, fix blocking issues before upload, and download the artifacts you need.",
   landingProof:
-    "Built for spreadsheet-driven payroll and payouts. Focused scope. Validation before ACH download.",
+    "PPD credits only. One batch per file. Validation before ACH download.",
   landingNote:
-    "Start with guided setup if you are creating a new file. If you already have an ACH file, use Validate to understand what needs attention.",
+    "Choose Generate to build a new file, or Validate if you already have one.",
   resultsPassTitle: "Your file passed validation.",
   resultsPassBody:
     "Your artifacts are ready. You can move into your bank upload workflow with much more confidence.",

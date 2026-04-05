@@ -8,13 +8,14 @@ This project is set up for:
 
 - CI with GitHub Actions on every push to `main`/`master` and every pull request
 - CD through Netlify using the Next.js frontend in `web/`
+- Optional static hosting through GitHub Pages using the Next.js frontend in `web/`
 
 The repository now has two app layers:
 
 - `web/`: the Netlify-ready frontend built with Next.js, TypeScript, Tailwind CSS, and client-side ACH logic
 - `app.py` + `achlint/`: the legacy Streamlit/Python implementation retained as a reference while the new frontend becomes the primary deployment target
 
-Once this folder is pushed to GitHub, Netlify can auto-deploy new commits from your selected branch after the CI checks pass.
+Once this folder is pushed to GitHub, Netlify or GitHub Pages can auto-deploy new commits from your selected branch after the CI checks pass.
 
 ## Run the Netlify frontend locally
 
@@ -68,3 +69,23 @@ pytest
 - The Netlify deployment target is the Next.js app in `web/`.
 - ACH generation and validation now run client-side in the frontend, which makes the product deployable on Netlify without a separate backend.
 - The old Streamlit app is still in the repo, but it is no longer the recommended hosting path.
+
+## Deploy to GitHub Pages
+
+This repo is primed for GitHub Pages at:
+
+- `https://satyajeetu.github.io/ACHLint/`
+
+To enable it:
+
+1. Push the latest code to `main`.
+2. In GitHub, open the repository settings.
+3. Go to `Pages`.
+4. Under `Build and deployment`, set `Source` to `GitHub Actions`.
+5. The workflow in [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml) will build and publish the static site automatically on each push to `main`.
+
+### GitHub Pages notes
+
+- The frontend is configured for static export in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts).
+- The GitHub Pages build uses the repository path prefix `/ACHLint/`, which matches the current repo name.
+- If you rename the repository, update the `repoName` value in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts).

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
-import { Roboto_Flex, Roboto_Mono } from "next/font/google";
+import { Inter, Roboto_Mono } from "next/font/google";
 import "./globals.css";
 
-const sans = Roboto_Flex({
-  variable: "--font-roboto-flex",
+const sans = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
