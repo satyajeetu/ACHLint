@@ -1,5 +1,9 @@
 <p align="center">
-  <img src="web/public/achlint-logo.svg" alt="ACHLint logo" width="420" />
+  <img src="./web/public/achlint-mark.svg" alt="ACHLint mark" width="84" />
+</p>
+
+<p align="center">
+  <img src="./web/public/achlint-logo.svg" alt="ACHLint logo" width="460" />
 </p>
 
 <h1 align="center">ACHLint</h1>
