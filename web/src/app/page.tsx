@@ -2,7 +2,6 @@
 
 import { ChangeEvent, startTransition, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import Image from "next/image";
 import {
   FileCheck2,
   Sparkles,
@@ -149,13 +148,14 @@ export default function Home() {
         <header className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
           <GlassCard>
             <div className="flex items-center gap-4">
-              <Image
-                src="/achlint-mark.svg"
+              {/* GitHub Pages static export is more reliable here with a relative asset path. */}
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="achlint-mark.svg"
                 alt="ACHLint"
                 width={56}
                 height={56}
                 className="h-14 w-14 rounded-[18px]"
-                priority
               />
               <div>
                 <div className="text-[32px] font-bold tracking-[-0.02em] text-[var(--md-sys-color-on-surface)]">
