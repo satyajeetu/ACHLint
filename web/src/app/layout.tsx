@@ -31,6 +31,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://satyajeetu.github.io/ACHLint/",
   },
+  icons: {
+    icon: "/achlint-mark.svg",
+    shortcut: "/achlint-mark.svg",
+    apple: "/achlint-mark.svg",
+  },
   openGraph: {
     title: "ACHLint | ACH File Generator and Validator",
     description:
@@ -38,12 +43,21 @@ export const metadata: Metadata = {
     url: "https://satyajeetu.github.io/ACHLint/",
     siteName: "ACHLint",
     type: "website",
+    images: [
+      {
+        url: "/achlint-logo.svg",
+        width: 592,
+        height: 176,
+        alt: "ACHLint logo",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ACHLint | ACH File Generator and Validator",
     description:
       "Create ACH files from CSV and validate NACHA uploads before bank submission.",
+    images: ["/achlint-logo.svg"],
   },
 };
 

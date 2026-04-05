@@ -1,4 +1,12 @@
-# ACHLint
+<p align="center">
+  <img src="web/public/achlint-logo.svg" alt="ACHLint logo" width="420" />
+</p>
+
+<h1 align="center">ACHLint</h1>
+
+<p align="center">
+  Generate ACH files from CSV and validate NACHA uploads before bank submission.
+</p>
 
 ACHLint is a lightweight ACH file generator and validator for spreadsheet-driven payroll and payout teams.
 

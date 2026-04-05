@@ -2,6 +2,7 @@
 
 import { ChangeEvent, startTransition, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import Image from "next/image";
 import {
   FileCheck2,
   Sparkles,
@@ -147,7 +148,24 @@ export default function Home() {
       <div className="mx-auto flex max-w-[1200px] flex-col gap-6">
         <header className="grid gap-4 lg:grid-cols-[1.4fr_0.8fr]">
           <GlassCard>
-            <div className="text-[32px] font-bold tracking-[-0.02em] text-[var(--md-sys-color-on-surface)]">ACHLint</div>
+            <div className="flex items-center gap-4">
+              <Image
+                src="/achlint-mark.svg"
+                alt="ACHLint"
+                width={56}
+                height={56}
+                className="h-14 w-14 rounded-[18px]"
+                priority
+              />
+              <div>
+                <div className="text-[32px] font-bold tracking-[-0.02em] text-[var(--md-sys-color-on-surface)]">
+                  ACHLint
+                </div>
+                <div className="text-xs font-medium uppercase tracking-[0.18em] text-[var(--md-sys-color-primary)]">
+                  ACH file workspace
+                </div>
+              </div>
+            </div>
             <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--md-sys-color-on-surface-variant)]">
               A focused ACH file workspace for spreadsheet-driven payroll and payout operations.
             </p>

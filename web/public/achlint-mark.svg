@@ -1,0 +1,7 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">ACHLint mark</title>
+  <desc id="desc">A geometric purple ACHLint icon.</desc>
+  <rect width="256" height="256" rx="64" fill="#EADDFF"/>
+  <path d="M92 70C92 56.745 102.745 46 116 46H140C153.255 46 164 56.745 164 70V92H186C199.255 92 210 102.745 210 116V140C210 153.255 199.255 164 186 164H164V186C164 199.255 153.255 210 140 210H116C102.745 210 92 199.255 92 186V164H70C56.745 164 46 153.255 46 140V116C46 102.745 56.745 92 70 92H92V70Z" fill="#6750A4"/>
+  <path d="M92 92H164V116H92V92ZM92 140H164V164H92V140ZM116 116H140V140H116V116Z" fill="#FFFBFE"/>
+</svg>
