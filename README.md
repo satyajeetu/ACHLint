@@ -1,60 +1,67 @@
 <p align="center">
-  <img src="./web/public/achlint-mark.svg" alt="ACHLint mark" width="84" />
+  <img src="./web/public/achlint-mark.svg" alt="ACHLint mark" width="88" />
 </p>
 
 <p align="center">
   <img src="./web/public/achlint-logo.svg" alt="ACHLint logo" width="460" />
 </p>
 
-<h1 align="center">ACHLint</h1>
-
 <p align="center">
   Generate ACH files from CSV and validate NACHA uploads before bank submission.
 </p>
 
-ACHLint is a lightweight ACH file generator and validator for spreadsheet-driven payroll and payout teams.
+<p align="center">
+  <a href="https://satyajeetu.github.io/ACHLint/">Live demo</a>
+</p>
 
-It helps operators:
-- convert a strict CSV into a PPD credits-only ACH/NACHA file
-- validate an existing ACH file before bank upload
-- catch blocking issues earlier with plain-language feedback
-- download remediation artifacts such as an exceptions CSV and validation report
+## Overview
 
-## Why this project exists
+ACHLint is a focused ACH workspace for spreadsheet-driven payout and payroll teams.
+It helps operators move from CSV to a bank-ready ACH file with clear validation, clean
+feedback, and downloadable remediation artifacts.
 
-Most small teams do not need a full treasury platform. They need a reliable way to:
+This project is intentionally narrow. It is designed to do one workflow well instead of
+trying to become a full treasury platform.
 
-1. prepare payout data in a spreadsheet
-2. turn it into a bank-ready ACH file
-3. validate the result before upload
+## What it does
 
-ACHLint is intentionally narrow so the workflow stays understandable and trustworthy.
+- Generates a PPD credits-only ACH/NACHA file from CSV input
+- Validates an existing ACH file before bank upload
+- Flags blocking issues and warnings in plain language
+- Produces supporting outputs like a validation report and exceptions CSV
 
-## Product scope
+## Who it is for
 
-Supported today:
+- Small teams preparing payroll or payout files in spreadsheets
+- Operators who need confidence before bank upload
+- Builders who want a lightweight ACH workflow without banking platform overhead
+
+## Current scope
+
+Supported:
 - PPD credits only
-- one batch per file
+- One batch per file
 - CSV-in to ACH-out generation
-- existing ACH file validation
-- operator-friendly issue reporting
+- Existing ACH file validation
+- Operator-friendly issue reporting
 
-Not supported today:
-- debits
+Not supported:
+- Debits
 - CCD, CTX, WEB, TEL, IAT
-- bank integrations or SFTP push
-- approval workflows
-- multi-batch authoring
+- Bank integrations or SFTP delivery
+- Approval workflows
+- Multi-batch authoring
 
-## Repository structure
+## Tech stack
 
-- [web/](/Users/satyajeetu/Desktop/ACHLint/web): primary frontend, built with Next.js, TypeScript, and Tailwind CSS
-- [.github/workflows/ci.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/ci.yml): CI checks
-- [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml): GitHub Pages deployment
+- Next.js 16
+- React 19
+- TypeScript
+- Tailwind CSS
+- GitHub Actions
+- GitHub Pages
 
 ## Run locally
-
-Frontend:
 
 ```bash
 cd web
@@ -62,9 +69,9 @@ npm install
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000)
+Open [http://localhost:3000](http://localhost:3000).
 
-Frontend checks:
+## Checks
 
 ```bash
 cd web
@@ -72,31 +79,31 @@ npm run lint
 npm run build
 ```
 
-## Deployment options
+## Deploy
 
-### GitHub Pages
-
-This repo is already configured for GitHub Pages at:
-
-- [https://satyajeetu.github.io/ACHLint/](https://satyajeetu.github.io/ACHLint/)
-
-Setup:
+This repo is set up for GitHub Pages deployment through GitHub Actions.
 
 1. Push the latest code to `main`
 2. Open repository `Settings`
-3. Go to `Pages`
+3. Open `Pages`
 4. Set `Source` to `GitHub Actions`
-5. GitHub will run the Pages workflow automatically on each push to `main`
+5. GitHub will build and publish automatically on each push to `main`
 
-Notes:
-- static export is configured in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts)
-- the GitHub Pages base path is set to `/ACHLint/`
-- if the repo name changes, update `repoName` in [web/next.config.ts](/Users/satyajeetu/Desktop/ACHLint/web/next.config.ts)
+Live site:
+[https://satyajeetu.github.io/ACHLint/](https://satyajeetu.github.io/ACHLint/)
 
-## CI/CD
+## Project structure
 
-This project includes:
-- GitHub Actions CI on push and pull request
-- GitHub Pages deployment workflow
+- [web/](/Users/satyajeetu/Desktop/ACHLint/web) - frontend application
+- [.github/workflows/ci.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/ci.yml) - CI workflow
+- [.github/workflows/deploy-github-pages.yml](/Users/satyajeetu/Desktop/ACHLint/.github/workflows/deploy-github-pages.yml) - Pages deployment workflow
 
-The Next.js app in [web/](/Users/satyajeetu/Desktop/ACHLint/web) is the full product surface and the only supported hosting path in this repository.
+## Why this project exists
+
+Many teams do not need a broad treasury product. They need a practical, trustworthy way to:
+
+1. Prepare payment data in a spreadsheet
+2. Generate an ACH file correctly
+3. Catch problems before upload
+
+ACHLint exists to make that workflow simpler and safer.
